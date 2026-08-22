@@ -283,10 +283,12 @@ class PenguinHelper {
 
   render() {
     // Position outer element without scaleX so speech bubble is NEVER mirrored!
-    this.el.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
+    if (this.el && this.el.style) {
+      this.el.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
+    }
     
     // Scale only body wrapper so character faces walking direction
-    if (this.bodyWrapper) {
+    if (this.bodyWrapper && this.bodyWrapper.style) {
       this.bodyWrapper.style.transform = `scaleX(${this.direction})`;
     }
   }
@@ -303,9 +305,6 @@ class PenguinHelper {
     this.onArrivedToPull = onArrived;
     this.onPullComplete = onComplete;
     this.pullProgress = 0;
-    
-    const phrases = ["Để em kéo trang nha! 🐧💨", "Em tới giúp chị Linh! ✨", "Kéo sang trang mới nè! 💖", "Lật tiếp nàoo! 🌟"];
-    this.say(phrases[Math.floor(Math.random() * phrases.length)], 1600);
   }
 
   startPulling() {
@@ -342,7 +341,7 @@ class PenguinHelper {
     this.el.classList.remove('pulling');
     this.state = 'CELEBRATING';
     this.stateTimer = 0;
-    this.cheer("Xong rồii! Siêu đẹp lun 💖");
+    this.el.classList.add('celebrating');
     
     if (this.onPullComplete) {
       const cb = this.onPullComplete;
@@ -427,24 +426,24 @@ class PenguinManager {
       return;
     }
 
-    const bookEl = document.getElementById('album-book');
-    if (!bookEl) {
+    const container = document.getElementById('book-container') || document.getElementById('album-book');
+    if (!container) {
       safeFlip();
       return;
     }
 
-    const rect = bookEl.getBoundingClientRect();
+    const rect = container.getBoundingClientRect();
     let startX, startY, endX, endY;
     
     if (direction === 'next') {
       startX = Math.min(window.innerWidth - 70, rect.right - 20);
       startY = Math.max(80, rect.bottom - 45);
-      endX = Math.max(20, rect.left - 25);
+      endX = Math.max(20, rect.left + 25);
       endY = startY;
     } else {
-      startX = Math.max(20, rect.left - 20);
+      startX = Math.max(20, rect.left + 20);
       startY = Math.max(80, rect.bottom - 45);
-      endX = Math.min(window.innerWidth - 70, rect.right - 20);
+      endX = Math.min(window.innerWidth - 70, rect.right - 25);
       endY = startY;
     }
 
@@ -486,7 +485,84 @@ class PenguinManager {
       }
     );
   }
+
+  // 💬 NGẪU NHIÊN LỜI THOẠI DỄ THƯƠNG KHI CHUYỂN TRANG
+  triggerPageFlipDialogue(direction = 'next', pageIndex = 0) {
+    if (!this.penguins || this.penguins.length === 0) return;
+
+    // Chọn ngẫu nhiên 1 chú chim cánh cụt
+    const p = this.penguins[Math.floor(Math.random() * this.penguins.length)];
+    if (!p) return;
+
+    let quote = "";
+
+    // Lời thoại theo trang đặc biệt
+    if (pageIndex === 0) {
+      const coverQuotes = [
+        "Chào mừng chị Linh đến với Album Kỷ Niệm! ✨📖",
+        "Mở trang đầu tiên ra xem ảnh xinh nha chị! 💖",
+        "Happy 19th Birthday Khánh Linh! 🎂✨"
+      ];
+      quote = coverQuotes[Math.floor(Math.random() * coverQuotes.length)];
+    } else if (pageIndex === 33) {
+      const cakeQuotes = [
+        "Sắp tới giờ thổi nến ước nguyện rùi nè chị Linh! 🎂🕯️",
+        "Bánh kem ngọt ngào dành riêng cho Mchouu nè! 🎂✨",
+        "Ước một điều ước thật đẹp nha chị Linh ơii! 💖"
+      ];
+      quote = cakeQuotes[Math.floor(Math.random() * cakeQuotes.length)];
+    } else if (pageIndex >= 34) {
+      const backQuotes = [
+        "Hành trình yêu thương sẽ còn viết tiếp mãi! 💖✨",
+        "Forever & Always with Mchouu! 🤎",
+        "Nhấn 'Xem Lại' để cùng ngắm lại từ đầu nha! 🔄✨"
+      ];
+      quote = backQuotes[Math.floor(Math.random() * backQuotes.length)];
+    } else if (direction === 'prev') {
+      const prevQuotes = [
+        "Xem lại trang trước nha chị! 🔄",
+        "Trang hồi nãy đẹp quá đúng hơm! 💖",
+        "Để tụi em lật lùi lại nè! 🐧✨",
+        "Kỷ niệm nào cũng muốn ngắm mãi thui! 🌸",
+        "Ngắm lại nụ cười ngọt ngào của Mchouu nà! 🤎",
+        "Lùi lại xem cho kỹ nha chị ơii! 🌟",
+        "Quay lại ngắm ảnh xinh của chị Linh nè! 📸",
+        "Trang nào cũng muốn lưu giữ mãi thôi! 🍂"
+      ];
+      quote = prevQuotes[Math.floor(Math.random() * prevQuotes.length)];
+    } else {
+      const nextQuotes = [
+        "Xem trang tiếp theo thôii! ✨",
+        "Chị Linh trang này xinh xỉu! 💖",
+        "Kỷ niệm này ngọt ngào quá nè! 🌸",
+        "Oa, khoảnh khắc đáng yêu ghê! 🐧✨",
+        "Để tụi em lật tiếp cho chị xem nha! 💨",
+        "Mỗi trang đều là một điều kỳ diệu! 🌟",
+        "Chị Mchouu lúc nào cũng rạng rỡ! 🤎",
+        "Khoảnh khắc này dễ thương quá chừng! 🌷",
+        "Tình yêu đong đầy từng trang sách luôn! 💕",
+        "Lật tiếp để xem bất ngờ phía sau nàoo! 🎁",
+        "Góc này chị Linh cười xinh lắm á! 📸",
+        "Trang này kỷ niệm đáng nhớ ghê! 🍂",
+        "Cùng đi tiếp hành trình yêu thương nha! ✨",
+        "Chị Linh tuổi 19 mãi hạnh phúc nhé! 🎂",
+        "Em thích ngắm nụ cười của chị Linh nhất! 💖",
+        "Xinh đẹp tuyệt vời luôn chị ơii! 👑",
+        "Trang nào của Mchouu cũng lung linh hết á! ✨",
+        "Trang tiếp theo có điều bất ngờ nè! 🌈",
+        "Càng xem càng thấy yêu chị Linh hơn! 🥰",
+        "Bé cánh cụt mê chị Linh nhất trần đời! 🐧💕"
+      ];
+      quote = nextQuotes[Math.floor(Math.random() * nextQuotes.length)];
+    }
+
+    p.say(quote, 2800);
+  }
 }
+
+// Global Export
+window.PenguinHelper = PenguinHelper;
+window.PenguinManager = PenguinManager;
 
 // Global instance
 window.addEventListener('DOMContentLoaded', () => {

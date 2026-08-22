@@ -1,16 +1,22 @@
 /**
  * =========================================================
- * 🌟 MAIN CONTROLLER & INTERACTION HUB 🌟
- * Intro Envelope, UI Modals, Gallery Drawer, Music & Theme Toggle
+ * 🌟 MAIN CONTROLLER & INTERACTION HUB (REFACTORED) 🌟
+ * =========================================================
+ * - Envelope Opening Experience & Transition to Main Stage
+ * - Navigation, Audio Playlist & Volume Control
+ * - Quick Thumbnail Gallery Drawer
+ * - Theme Switcher & Fullscreen Mode
+ * - 3D Mouse Parallax Tilt
  * =========================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initialize 3D Flipbook
-  const albumBook = new window.AlbumBook();
+  // 1. Initialize 3D Flipbook Instance
+  const albumBook = new window.AlbumBook('book-container', 'album-book');
   window.albumBookInstance = albumBook;
+  window.albumBook = albumBook;
 
-  // 2. DOM Elements
+  // 2. Core DOM Elements
   const introOverlay = document.getElementById('intro-overlay');
   const envelopeBtn = document.getElementById('btn-open-envelope');
   const envelope = document.getElementById('intro-envelope');
@@ -50,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 💌 1. INTRO ENVELOPE OPENING EXPERIENCE
   // =========================================================
   const openGiftEnvelope = () => {
-    if (envelope.classList.contains('opened')) return;
+    if (!envelope || envelope.classList.contains('opened')) return;
     
     envelope.classList.add('opened');
     
@@ -66,15 +72,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Smooth fade out of intro and reveal album book
     setTimeout(() => {
-      introOverlay.classList.add('fade-out');
-      mainStage.classList.remove('hidden-stage');
-      mainStage.classList.add('visible-stage');
+      if (introOverlay) introOverlay.classList.add('fade-out');
+      if (mainStage) {
+        mainStage.classList.remove('hidden-stage');
+        mainStage.classList.add('visible-stage');
+      }
       
       albumBook.updateContainerCentering();
       albumBook.handleVideoPlayback();
       
       setTimeout(() => {
-        introOverlay.style.display = 'none';
+        if (introOverlay) introOverlay.style.display = 'none';
       }, 900);
     }, 1400);
   };
@@ -126,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // =========================================================
   // 🖼️ 4. QUICK THUMBNAIL GALLERY MODAL
-  // ==========================================
+  // =========================================================
   const buildGalleryGrid = () => {
     const galleryGrid = document.getElementById('gallery-grid-content');
     if (!galleryGrid) return;
@@ -137,27 +145,28 @@ document.addEventListener('DOMContentLoaded', () => {
       const item = document.createElement('div');
       item.className = 'gallery-thumbnail-card';
       
-      let thumbImg = 'media/IMG_20260603_100758_821.jpg';
+      let thumbImg = 'media/1.jpg';
       let title = page.title || `Trang ${idx + 1}`;
       let isVid = page.type === 'video' || (page.src && page.src.endsWith('.mp4'));
       
       if (page.type === 'cover') {
-        thumbImg = page.coverImage || thumbImg;
-        title = 'Bìa Sách';
+        thumbImg = page.coverImage || 'media/33.jpg';
+        title = 'Bìa Sách ✨';
       } else if (page.type === 'cake') {
-        thumbImg = 'media/IMG_20260822_133030_110.jpg';
+        thumbImg = 'media/33.jpg';
         title = 'Bánh Sinh Nhật 🎂';
       } else if (page.type === 'letter') {
-        thumbImg = 'media/IMG_20260809_200907_391.jpg';
+        thumbImg = 'media/2.jpg';
         title = 'Bức Thư Tình 💌';
       } else if (page.type === 'back-cover') {
-        thumbImg = 'media/IMG_20260822_133249_421.jpg';
-        title = 'Trang Cuối';
+        thumbImg = 'media/33.jpg';
+        title = 'Trang Cuối 🤎';
       } else if (page.src) {
         thumbImg = page.src;
       }
 
-      const sheetTarget = Math.floor(idx / 2);
+      const pageNum = idx + 1;
+      const sheetTarget = pageNum === 1 ? 0 : Math.floor(pageNum / 2);
 
       item.innerHTML = `
         <div class="thumb-media-wrapper">
@@ -165,13 +174,13 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="thumb-info">
           <span class="thumb-title">${title}</span>
-          <span class="thumb-page-num">Trang ${idx + 1}</span>
+          <span class="thumb-page-num">Trang ${pageNum}</span>
         </div>
       `;
 
       item.addEventListener('click', () => {
         albumBook.goToPage(sheetTarget);
-        galleryModal.classList.remove('active');
+        if (galleryModal) galleryModal.classList.remove('active');
       });
 
       galleryGrid.appendChild(item);
