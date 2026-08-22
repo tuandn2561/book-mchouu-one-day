@@ -350,7 +350,6 @@ window.CONFIG = {
     "media/IMG_20260610_011315_933.jpg",
     "media/IMG_20260610_011507_010.jpg",
     "media/IMG_20260610_011534_074.jpg",
-    "media/IMG_20260629_185914_091.jpg",
     "media/IMG_20260809_200901_822.jpg",
     "media/IMG_20260809_200904_321.jpg",
     "media/IMG_20260809_200907_391.jpg",
