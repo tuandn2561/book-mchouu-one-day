@@ -424,11 +424,18 @@ class AlbumBook {
   }
 
   nextPage() {
-    if (this.isFlipping) return;
+    const now = Date.now();
+    if (this.isFlipping && (now - (this.lastFlipTime || 0) < 900)) return;
     if (this.currentPageIndex >= this.totalSheets) return;
     
+    this.isFlipping = true;
+    this.lastFlipTime = now;
+
     const executeFlip = () => {
-      this.isFlipping = true;
+      if (this.currentPageIndex >= this.totalSheets) {
+        this.isFlipping = false;
+        return;
+      }
       const currentSheet = this.sheets[this.currentPageIndex];
       
       if (window.audioManager) window.audioManager.playPageFlipSFX();
@@ -443,7 +450,7 @@ class AlbumBook {
       
       setTimeout(() => {
         this.isFlipping = false;
-      }, 750);
+      }, 700);
     };
 
     if (window.penguinManager) {
@@ -454,11 +461,18 @@ class AlbumBook {
   }
 
   prevPage() {
-    if (this.isFlipping) return;
+    const now = Date.now();
+    if (this.isFlipping && (now - (this.lastFlipTime || 0) < 900)) return;
     if (this.currentPageIndex <= 0) return;
     
+    this.isFlipping = true;
+    this.lastFlipTime = now;
+
     const executeFlip = () => {
-      this.isFlipping = true;
+      if (this.currentPageIndex <= 0) {
+        this.isFlipping = false;
+        return;
+      }
       this.currentPageIndex--;
       const prevSheet = this.sheets[this.currentPageIndex];
       
@@ -473,7 +487,7 @@ class AlbumBook {
       
       setTimeout(() => {
         this.isFlipping = false;
-      }, 750);
+      }, 700);
     };
 
     if (window.penguinManager) {
