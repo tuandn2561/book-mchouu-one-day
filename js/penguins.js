@@ -1,7 +1,7 @@
 /**
  * =========================================================
- * 🐧 ULTRA-KAWAII CHIBI PENGUINS ENGINE (BUG-FREE & ROCK SOLID) 🐧
- * 4 Cute Waddling Chibi Penguins with Reliable Page-Pulling
+ * 🐧 ULTRA-KAWAII CHIBI PENGUINS (100% BULLETPROOF & NO TEXT MIRRORING) 🐧
+ * 4 Cute Waddling Chibi Helpers with Reliable Page-Pulling & Crisp Vietnamese Text
  * =========================================================
  */
 
@@ -16,8 +16,7 @@ class PenguinHelper {
     
     this.width = 64;
     this.height = 76;
-    this.vx = (Math.random() - 0.5) * 1.4;
-    if (Math.abs(this.vx) < 0.4) this.vx = 0.8;
+    this.vx = (id % 2 === 0 ? 1 : -1) * (0.8 + Math.random() * 0.4);
     this.direction = this.vx >= 0 ? 1 : -1;
     this.state = 'WALKING'; // WALKING, IDLE, RUNNING_TO_PULL, PULLING, CELEBRATING
     
@@ -26,8 +25,9 @@ class PenguinHelper {
     this.homeY = startY;
     
     this.stateTimer = 0;
-    this.walkTimer = 0;
-    this.idleTimer = 0;
+    this.idleDuration = 1500;
+    this.sayTimer = null;
+    this.pullProgress = 0;
     
     this.createDOM();
   }
@@ -39,43 +39,39 @@ class PenguinHelper {
     
     let accessorySVG = '';
     if (this.accessory === 'bow') {
-      // Kawaii Pink Ribbon & Bell
       accessorySVG = `
         <g class="acc-bow" transform="translate(30, 20)">
           <path d="M-10 -6 Q-18 -12 -18 0 Q-18 8 -8 2 Z" fill="#ff758c"/>
           <path d="M10 -6 Q18 -12 18 0 Q18 8 8 2 Z" fill="#ff758c"/>
-          <circle cx="0" cy="0" r="5" fill="#ff4b72"/>
-          <circle cx="0" cy="4" r="3" fill="#ffd700"/>
+          <circle cx="0" cy="0" r="4.5" fill="#ff4b72"/>
+          <circle cx="0" cy="3.5" r="2.5" fill="#ffd700"/>
         </g>
       `;
     } else if (this.accessory === 'hat') {
-      // Sparkling Birthday Party Hat
       accessorySVG = `
-        <g class="acc-hat" transform="translate(30, 8)">
-          <polygon points="0,-16 -12,8 12,8" fill="url(#hat-grad-${this.id})"/>
+        <g class="acc-hat" transform="translate(30, 9)">
+          <polygon points="0,-16 -12,7 12,7" fill="url(#hat-grad-${this.id})"/>
           <circle cx="0" cy="-16" r="3.5" fill="#ffd700"/>
           <path d="M-8 0 Q0 6 8 0" stroke="#ffffff" stroke-width="2.5" fill="none"/>
-          <path d="M-10 6 Q0 12 10 6" stroke="#ff758c" stroke-width="2" fill="none"/>
+          <path d="M-10 5 Q0 11 10 5" stroke="#ff758c" stroke-width="2" fill="none"/>
         </g>
       `;
     } else if (this.accessory === 'scarf') {
-      // Cozy Knitted Scarf with Fringe
       accessorySVG = `
         <g class="acc-scarf" transform="translate(30, 40)">
           <path d="M-16 -3 Q0 5 16 -3 Q18 4 14 7 Q0 13 -14 7 Z" fill="#d4a373"/>
-          <path d="M6 3 L9 18 L15 17 L12 2 Z" fill="#8d5b4c"/>
-          <path d="M8 18 L15 17" stroke="#ffd700" stroke-width="2" stroke-dasharray="2 1"/>
+          <path d="M6 3 L9 17 L15 16 L12 2 Z" fill="#8d5b4c"/>
+          <path d="M8 17 L15 16" stroke="#ffd700" stroke-width="1.8" stroke-dasharray="2 1"/>
         </g>
       `;
     } else {
-      // Royal Cute Crown
       accessorySVG = `
         <g class="acc-crown" transform="translate(30, 10)">
           <polygon points="-12,6 -15,-6 -6,0 0,-10 6,0 15,-6 12,6" fill="#ffd700"/>
           <circle cx="-15" cy="-6" r="2" fill="#ff4b72"/>
           <circle cx="0" cy="-10" r="2.5" fill="#ff758c"/>
           <circle cx="15" cy="-6" r="2" fill="#ff4b72"/>
-          <circle cx="0" cy="2" r="2" fill="#fff"/>
+          <circle cx="0" cy="2" r="1.8" fill="#fff"/>
         </g>
       `;
     }
@@ -85,7 +81,6 @@ class PenguinHelper {
       <div class="penguin-body-wrapper">
         <svg viewBox="0 0 60 72" class="penguin-svg">
           <defs>
-            <!-- Smooth Gradients for Soft Kawaii Look -->
             <radialGradient id="body-grad-${this.id}" cx="45%" cy="35%" r="65%">
               <stop offset="0%" stop-color="#4a3733"/>
               <stop offset="60%" stop-color="#34231f"/>
@@ -105,10 +100,10 @@ class PenguinHelper {
             </filter>
           </defs>
 
-          <!-- Soft Drop Shadow on floor -->
-          <ellipse cx="30" cy="68" rx="20" ry="4" fill="rgba(50,25,15,0.22)"/>
+          <!-- Shadow -->
+          <ellipse cx="30" cy="68" rx="20" ry="4" fill="rgba(50,25,15,0.25)"/>
           
-          <!-- Cute Chubby Feet -->
+          <!-- Feet -->
           <g class="foot foot-left">
             <ellipse cx="21" cy="66" rx="7.5" ry="4" fill="#ff9f43"/>
             <circle cx="16" cy="65" r="2.5" fill="#ffa952"/>
@@ -120,40 +115,36 @@ class PenguinHelper {
             <circle cx="44" cy="65" r="2.5" fill="#ffa952"/>
           </g>
           
-          <!-- Main Chubby Body (Egg Shape) -->
+          <!-- Main Body -->
           <path d="M30 14 C17 14 11 26 11 44 C11 58 19 66 30 66 C41 66 49 58 49 44 C49 26 43 14 30 14 Z" fill="url(#body-grad-${this.id})"/>
           
-          <!-- Fluffy Heart/Peach Belly -->
+          <!-- Fluffy Belly -->
           <path d="M30 25 C21 25 17 34 17 46 C17 58 22 64 30 64 C38 64 43 58 43 46 C43 34 39 25 30 25 Z" fill="url(#belly-grad-${this.id})"/>
           
-          <!-- Glowing Rosy Cheeks -->
+          <!-- Rosy Cheeks -->
           <ellipse cx="18" cy="38" rx="4.5" ry="3" fill="#ff758c" opacity="0.65" filter="url(#blush-blur-${this.id})"/>
           <ellipse cx="42" cy="38" rx="4.5" ry="3" fill="#ff758c" opacity="0.65" filter="url(#blush-blur-${this.id})"/>
           
-          <!-- Big Kawaii Sparkling Eyes -->
+          <!-- Big Kawaii Anime Eyes -->
           <g class="eye-group eye-left">
             <ellipse cx="22" cy="32" rx="3.8" ry="4.8" fill="#1b120f"/>
-            <!-- Main Reflection -->
             <ellipse cx="23" cy="30.5" rx="1.8" ry="2.2" fill="#ffffff"/>
-            <!-- Secondary Mini Twinkle -->
             <circle cx="20.8" cy="34.2" r="0.9" fill="#ffffff"/>
           </g>
           <g class="eye-group eye-right">
             <ellipse cx="38" cy="32" rx="3.8" ry="4.8" fill="#1b120f"/>
-            <!-- Main Reflection -->
             <ellipse cx="39" cy="30.5" rx="1.8" ry="2.2" fill="#ffffff"/>
-            <!-- Secondary Mini Twinkle -->
             <circle cx="36.8" cy="34.2" r="0.9" fill="#ffffff"/>
           </g>
           
-          <!-- Chubby Sweet Beak -->
+          <!-- Beak -->
           <path d="M26 35 Q30 32 34 35 Q30 42 26 35 Z" fill="#ff9f43"/>
           <ellipse cx="30" cy="35" rx="3" ry="1.2" fill="#ffb775"/>
           
-          <!-- Tiny Happy Mouth Line under Beak -->
+          <!-- Tiny Smile Line -->
           <path d="M28 38 Q30 40 32 38" stroke="#d35400" stroke-width="0.8" fill="none"/>
           
-          <!-- Cute Flippers / Wings -->
+          <!-- Flippers -->
           <g class="flipper flipper-left">
             <path d="M12 36 Q5 44 8 52 Q12 55 14 44 Z" fill="#34231f"/>
           </g>
@@ -161,27 +152,28 @@ class PenguinHelper {
             <path d="M48 36 Q55 44 52 52 Q48 55 46 44 Z" fill="#34231f"/>
           </g>
           
-          <!-- Special Accessory -->
+          <!-- Accessory -->
           ${accessorySVG}
         </svg>
       </div>
     `;
 
     this.bubbleEl = this.el.querySelector('.penguin-bubble');
+    this.bodyWrapper = this.el.querySelector('.penguin-body-wrapper');
 
-    // Click penguin for cute pop sound, speech & particle burst
+    // Click penguin interaction
     this.el.addEventListener('click', (e) => {
       e.stopPropagation();
       const wishes = [
-        "Chúc Khánh Linh tuổi 19 thật rực rỡ! 🌸",
-        "Mchouu lúc nào cũng cute nhất! 💖",
-        "Chúc em sinh nhật ngập tràn hạnh phúc! 🎂",
-        "Luôn luôn cười tươi như này nhé! ✨"
+        "Chúc Khánh Linh sinh nhật vui vẻ! 🌸",
+        "Mchouu lúc nào cũng xinh nhất! 💖",
+        "Chúc chị Linh tuổi 19 thật rực rỡ! 🎂",
+        "Luôn cười tươi và hạnh phúc nha! ✨"
       ];
       this.cheer(wishes[Math.floor(Math.random() * wishes.length)]);
       if (window.audioManager) window.audioManager.playPopSFX();
       if (window.particleEngine) {
-        window.particleEngine.triggerConfetti(14, this.x + 30, this.y);
+        window.particleEngine.triggerConfetti(15, this.x + 30, this.y);
       }
     });
 
@@ -195,29 +187,26 @@ class PenguinHelper {
     this.bubbleEl.classList.remove('hidden');
     this.bubbleEl.classList.add('pop-in');
     
-    if (this.sayTimeout) clearTimeout(this.sayTimeout);
-    this.sayTimeout = setTimeout(() => {
-      this.bubbleEl.classList.remove('pop-in');
-      this.bubbleEl.classList.add('hidden');
+    if (this.sayTimer) clearTimeout(this.sayTimer);
+    this.sayTimer = setTimeout(() => {
+      if (this.bubbleEl) {
+        this.bubbleEl.classList.remove('pop-in');
+        this.bubbleEl.classList.add('hidden');
+      }
     }, duration);
   }
 
   cheer(msg = "Yay! ✨") {
     this.state = 'CELEBRATING';
+    this.stateTimer = 0;
     this.el.classList.add('celebrating');
     this.say(msg);
-    setTimeout(() => {
-      this.el.classList.remove('celebrating');
-      this.state = 'WALKING';
-    }, 1600);
   }
 
   update(dt, screenW, screenH) {
     this.stateTimer += dt;
 
     if (this.state === 'WALKING') {
-      this.walkTimer += dt;
-      
       const minX = 15;
       const maxX = screenW - this.width - 15;
       
@@ -233,19 +222,20 @@ class PenguinHelper {
         this.direction = -1;
       }
       
-      if (Math.random() < 0.006) {
+      if (Math.random() < 0.005) {
         this.state = 'IDLE';
-        this.idleTimer = Math.random() * 1800 + 800;
+        this.stateTimer = 0;
+        this.idleDuration = Math.random() * 1500 + 800;
         this.el.classList.remove('walking');
       } else {
         this.el.classList.add('walking');
       }
       
     } else if (this.state === 'IDLE') {
-      this.idleTimer -= dt;
-      if (this.idleTimer <= 0) {
+      if (this.stateTimer >= this.idleDuration) {
         this.state = 'WALKING';
-        this.vx = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 0.8 + 0.8);
+        this.stateTimer = 0;
+        this.vx = (Math.random() > 0.5 ? 1 : -1) * (0.8 + Math.random() * 0.4);
         this.direction = this.vx >= 0 ? 1 : -1;
       }
       
@@ -259,13 +249,13 @@ class PenguinHelper {
       
       this.direction = dx >= 0 ? 1 : -1;
       
-      // Safety timeout: If running takes > 700ms, force start pulling
-      if (dist < 20 || this.stateTimer > 700) {
+      // Reach destination or safety timeout (500ms)
+      if (dist < 25 || this.stateTimer > 500) {
         this.x = this.targetX;
         this.y = this.targetY;
         this.startPulling();
       } else {
-        const speed = 11.0; // Fast and snappy run speed
+        const speed = 14.0; // Very fast & responsive dash
         this.x += (dx / dist) * speed;
         this.y += (dy / dist) * speed;
       }
@@ -273,11 +263,18 @@ class PenguinHelper {
     } else if (this.state === 'PULLING') {
       if (this.pullProgress !== undefined) {
         this.x = this.pullStartX + (this.pullEndX - this.pullStartX) * this.pullProgress;
-        this.y = this.pullStartY + Math.sin(this.pullProgress * Math.PI) * -18;
+        this.y = this.pullStartY + Math.sin(this.pullProgress * Math.PI) * -16;
       }
-      // Safety timeout: If pulling takes > 850ms, force finish
-      if (this.stateTimer > 850) {
+      if (this.stateTimer > 750) {
         this.finishPulling();
+      }
+      
+    } else if (this.state === 'CELEBRATING') {
+      if (this.stateTimer > 1300) {
+        this.el.classList.remove('celebrating');
+        this.state = 'WALKING';
+        this.stateTimer = 0;
+        this.y = this.homeY;
       }
     }
 
@@ -285,7 +282,13 @@ class PenguinHelper {
   }
 
   render() {
-    this.el.style.transform = `translate3d(${this.x}px, ${this.y}px, 0) scaleX(${this.direction})`;
+    // Position outer element without scaleX so speech bubble is NEVER mirrored!
+    this.el.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
+    
+    // Scale only body wrapper so character faces walking direction
+    if (this.bodyWrapper) {
+      this.bodyWrapper.style.transform = `scaleX(${this.direction})`;
+    }
   }
 
   assignToPullPage(targetX, targetY, endX, endY, onArrived, onComplete) {
@@ -301,8 +304,8 @@ class PenguinHelper {
     this.onPullComplete = onComplete;
     this.pullProgress = 0;
     
-    const phrases = ["Để em kéo trang nàoo! 🐧💨", "Em tới giúp chị Linh! ✨", "Kéo sang trang mới nè! 💖", "Lật tiếp nàoo! 🌟"];
-    this.say(phrases[Math.floor(Math.random() * phrases.length)], 1500);
+    const phrases = ["Để em kéo trang nha! 🐧💨", "Em tới giúp chị Linh! ✨", "Kéo sang trang mới nè! 💖", "Lật tiếp nàoo! 🌟"];
+    this.say(phrases[Math.floor(Math.random() * phrases.length)], 1600);
   }
 
   startPulling() {
@@ -312,12 +315,13 @@ class PenguinHelper {
     this.el.classList.add('pulling');
     
     if (this.onArrivedToPull) {
-      this.onArrivedToPull();
-      this.onArrivedToPull = null; // Prevent double invoke
+      const cb = this.onArrivedToPull;
+      this.onArrivedToPull = null;
+      cb();
     }
     
     const startTime = Date.now();
-    const duration = 700;
+    const duration = 650;
     
     const pullStep = () => {
       if (this.state !== 'PULLING') return;
@@ -335,36 +339,31 @@ class PenguinHelper {
   }
 
   finishPulling() {
-    if (this.state !== 'PULLING' && this.state !== 'RUNNING_TO_PULL') return;
-    
     this.el.classList.remove('pulling');
     this.state = 'CELEBRATING';
+    this.stateTimer = 0;
     this.cheer("Xong rồii! Siêu đẹp lun 💖");
     
     if (this.onPullComplete) {
-      this.onPullComplete();
+      const cb = this.onPullComplete;
       this.onPullComplete = null;
+      cb();
     }
     
-    setTimeout(() => {
-      this.state = 'WALKING';
-      this.targetX = null;
-      this.targetY = null;
-      this.y = this.homeY;
-      this.el.classList.remove('celebrating');
-    }, 1200);
+    this.targetX = null;
+    this.targetY = null;
+    this.y = this.homeY;
   }
 }
 
 // =========================================================
-// 🐧 PENGUIN MANAGER (FAIL-SAFE & NEVER FREEZES)
+// 🐧 PENGUIN MANAGER (ZERO FREEZE GUARANTEE)
 // =========================================================
 class PenguinManager {
   constructor() {
     this.container = document.getElementById('penguins-container');
     this.penguins = [];
-    this.isBusyPulling = false;
-    
+    this.isBusy = false;
     this.init();
   }
 
@@ -375,7 +374,6 @@ class PenguinManager {
     const h = window.innerHeight;
     const floorY = h - 85;
     
-    // 4 Cute Chibi Characters
     const configs = [
       { id: 1, name: "Poby Bé Nơ", acc: "bow", x: w * 0.12, y: floorY },
       { id: 2, name: "Bibi Mũ Tiệc", acc: "hat", x: w * 0.35, y: floorY },
@@ -395,7 +393,7 @@ class PenguinManager {
     const floorY = window.innerHeight - 85;
     this.penguins.forEach(p => {
       p.homeY = floorY;
-      if (p.state === 'WALKING' || p.state === 'IDLE') {
+      if (p.state === 'WALKING' || p.state === 'IDLE' || p.state === 'CELEBRATING') {
         p.y = floorY;
       }
     });
@@ -413,88 +411,84 @@ class PenguinManager {
     requestAnimationFrame((t) => this.loop(t));
   }
 
-  // 🌟 ROCK-SOLID PAGE FLIP DISPATCH (WITH WATCHDOG) 🌟
+  // 🌟 RELIABLE PAGE FLIP: Always triggers flip, never hangs
   requestPageFlip(direction, performFlipCallback) {
-    // If already pulling, immediately perform flip to avoid any freeze
-    if (this.isBusyPulling) {
-      performFlipCallback();
+    let triggered = false;
+    const safeFlip = () => {
+      if (!triggered) {
+        triggered = true;
+        performFlipCallback();
+      }
+    };
+
+    // If another flip is currently animating, execute flip immediately
+    if (this.isBusy) {
+      safeFlip();
       return;
     }
-    
+
     const bookEl = document.getElementById('album-book');
     if (!bookEl) {
-      performFlipCallback();
+      safeFlip();
       return;
     }
-    
+
     const rect = bookEl.getBoundingClientRect();
     let startX, startY, endX, endY;
     
     if (direction === 'next') {
       startX = Math.min(window.innerWidth - 70, rect.right - 20);
-      startY = Math.max(100, rect.bottom - 45);
+      startY = Math.max(80, rect.bottom - 45);
       endX = Math.max(20, rect.left - 25);
       endY = startY;
     } else {
       startX = Math.max(20, rect.left - 20);
-      startY = Math.max(100, rect.bottom - 45);
+      startY = Math.max(80, rect.bottom - 45);
       endX = Math.min(window.innerWidth - 70, rect.right - 20);
       endY = startY;
     }
-    
-    // Find closest penguin
+
+    // Pick closest penguin
     let nearestPenguin = null;
     let minDist = Infinity;
     
     this.penguins.forEach(p => {
-      if (p.state === 'WALKING' || p.state === 'IDLE') {
-        const d = Math.abs(p.x - startX);
-        if (d < minDist) {
-          minDist = d;
-          nearestPenguin = p;
-        }
+      const d = Math.abs(p.x - startX);
+      if (d < minDist) {
+        minDist = d;
+        nearestPenguin = p;
       }
     });
-    
-    // If all are busy, pick first penguin and force state
+
     if (!nearestPenguin) {
       nearestPenguin = this.penguins[0];
-      nearestPenguin.state = 'WALKING';
     }
-    
-    this.isBusyPulling = true;
-    let hasTriggeredFlip = false;
-    
-    const safeTriggerFlip = () => {
-      if (!hasTriggeredFlip) {
-        hasTriggeredFlip = true;
-        performFlipCallback();
-      }
-    };
 
-    // 🛡️ WATCHDOG TIMER: Guarantees flip NEVER gets stuck under any circumstance!
-    const watchdogTimer = setTimeout(() => {
-      safeTriggerFlip();
-      this.isBusyPulling = false;
-    }, 700);
-    
+    this.isBusy = true;
+
+    // Hard fallback timer (max 450ms wait for penguin arrival)
+    const watchdog = setTimeout(() => {
+      safeFlip();
+      this.isBusy = false;
+    }, 450);
+
     nearestPenguin.assignToPullPage(
       startX,
       startY,
       endX,
       endY,
       () => {
-        clearTimeout(watchdogTimer);
-        safeTriggerFlip();
+        clearTimeout(watchdog);
+        safeFlip();
       },
       () => {
-        this.isBusyPulling = false;
+        this.isBusy = false;
       }
     );
   }
 }
 
-// Global instance initialized on DOM load
+// Global instance
 window.addEventListener('DOMContentLoaded', () => {
   window.penguinManager = new PenguinManager();
 });
