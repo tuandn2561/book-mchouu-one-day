@@ -209,7 +209,15 @@
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .cute-penguin {
-    width: 48px;
-    height: 58px;
+    width: 44px;
+    height: 54px;
+  }
+
+  .penguin-bubble {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+    top: -30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(60, 30, 20, 0.18);
   }
 }
