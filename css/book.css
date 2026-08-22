@@ -171,6 +171,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .blank-heart {
   font-size: 3rem;
   opacity: 0.35;
@@ -232,9 +233,17 @@
 }
 
 @keyframes heartPopAnim {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.6) rotate(15deg); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.6) rotate(15deg);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* --- 6. POLAROID PHOTO CARDS & MEDIA --- */
@@ -327,7 +336,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 1.1rem;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 
 /* --- 7. WASHI TAPES & STICKERS --- */
@@ -341,14 +350,44 @@
   clip-path: polygon(0 0, 96% 2%, 100% 100%, 4% 98%);
 }
 
-.tape-top-left { top: -6px; left: -6px; transform: rotate(-25deg); }
-.tape-top-right { top: -6px; right: -6px; transform: rotate(25deg); }
-.tape-cover-top { top: -8px; left: 50%; transform: translateX(-50%) rotate(-3deg); width: 90px; }
+.tape-top-left {
+  top: -6px;
+  left: -6px;
+  transform: rotate(-25deg);
+}
 
-.washi-tape.mocha { background: rgba(141, 91, 76, 0.65); border: 1px dashed rgba(255, 235, 220, 0.6); }
-.washi-tape.caramel { background: rgba(212, 163, 115, 0.7); border: 1px dashed rgba(255, 245, 230, 0.7); }
-.washi-tape.gold { background: rgba(255, 215, 0, 0.6); border: 1px dashed rgba(186, 133, 84, 0.5); }
-.washi-tape.sand { background: rgba(230, 204, 178, 0.75); border: 1px dashed rgba(124, 71, 56, 0.4); }
+.tape-top-right {
+  top: -6px;
+  right: -6px;
+  transform: rotate(25deg);
+}
+
+.tape-cover-top {
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 90px;
+}
+
+.washi-tape.mocha {
+  background: rgba(141, 91, 76, 0.65);
+  border: 1px dashed rgba(255, 235, 220, 0.6);
+}
+
+.washi-tape.caramel {
+  background: rgba(212, 163, 115, 0.7);
+  border: 1px dashed rgba(255, 245, 230, 0.7);
+}
+
+.washi-tape.gold {
+  background: rgba(255, 215, 0, 0.6);
+  border: 1px dashed rgba(186, 133, 84, 0.5);
+}
+
+.washi-tape.sand {
+  background: rgba(230, 204, 178, 0.75);
+  border: 1px dashed rgba(124, 71, 56, 0.4);
+}
 
 .stickers-container {
   display: flex;
@@ -361,7 +400,10 @@
   transition: transform 0.25s ease;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
 }
-.page-sticker:hover { transform: scale(1.3) rotate(12deg); }
+
+.page-sticker:hover {
+  transform: scale(1.3) rotate(12deg);
+}
 
 /* --- 8. COVER PAGE --- */
 .cover-page {
@@ -579,15 +621,50 @@
   font-size: 0.9rem;
   animation: sparkleTwinkle 2.5s ease-in-out infinite alternate;
 }
-.sp-1 { top: 12px; left: 18px; animation-delay: 0s; }
-.sp-2 { top: 25px; right: 20px; font-size: 0.75rem; animation-delay: 0.8s; }
-.sp-3 { bottom: 45px; left: 10px; font-size: 0.8rem; animation-delay: 1.4s; }
-.sp-4 { bottom: 50px; right: 12px; font-size: 0.75rem; animation-delay: 0.4s; }
+
+.sp-1 {
+  top: 12px;
+  left: 18px;
+  animation-delay: 0s;
+}
+
+.sp-2 {
+  top: 25px;
+  right: 20px;
+  font-size: 0.75rem;
+  animation-delay: 0.8s;
+}
+
+.sp-3 {
+  bottom: 45px;
+  left: 10px;
+  font-size: 0.8rem;
+  animation-delay: 1.4s;
+}
+
+.sp-4 {
+  bottom: 50px;
+  right: 12px;
+  font-size: 0.75rem;
+  animation-delay: 0.4s;
+}
 
 @keyframes sparkleTwinkle {
-  0% { transform: translateY(0) scale(0.85); opacity: 0.4; }
-  50% { transform: translateY(-5px) scale(1.2); opacity: 1; filter: drop-shadow(0 0 6px #ffd700); }
-  100% { transform: translateY(-2px) scale(0.9); opacity: 0.6; }
+  0% {
+    transform: translateY(0) scale(0.85);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: translateY(-5px) scale(1.2);
+    opacity: 1;
+    filter: drop-shadow(0 0 6px #ffd700);
+  }
+
+  100% {
+    transform: translateY(-2px) scale(0.9);
+    opacity: 0.6;
+  }
 }
 
 /* Porcelain 3D Stand */
@@ -665,8 +742,15 @@
 }
 
 @keyframes topperGlow {
-  0% { transform: scale(1); filter: drop-shadow(0 2px 4px rgba(212, 163, 115, 0.4)); }
-  100% { transform: scale(1.03); filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.8)); }
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 2px 4px rgba(212, 163, 115, 0.4));
+  }
+
+  100% {
+    transform: scale(1.03);
+    filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.8));
+  }
 }
 
 /* Tiers */
@@ -697,7 +781,10 @@
   display: inline-block;
   transition: transform 0.2s ease;
 }
-.cake-berry:hover { transform: scale(1.2) rotate(10deg); }
+
+.cake-berry:hover {
+  transform: scale(1.2) rotate(10deg);
+}
 
 .tier-middle {
   width: 132px;
@@ -759,10 +846,22 @@
   border-radius: 0 0 6px 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.d-1 { height: 10px; }
-.d-2 { height: 16px; }
-.d-3 { height: 12px; }
-.d-4 { height: 8px; }
+
+.d-1 {
+  height: 10px;
+}
+
+.d-2 {
+  height: 16px;
+}
+
+.d-3 {
+  height: 12px;
+}
+
+.d-4 {
+  height: 8px;
+}
 
 .mocha-drips .drip {
   background: linear-gradient(180deg, #8d5b4c 0%, #6f3f33 100%);
@@ -824,7 +923,7 @@
   background: #ffd700;
   padding: 1px 3px;
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   border: 1px solid #ffffff;
 }
 
@@ -850,7 +949,7 @@
   position: relative;
   width: 12px;
   height: 22px;
-  background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffea00 30%, #ff5500 80%, rgba(255,0,0,0.2) 100%);
+  background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffea00 30%, #ff5500 80%, rgba(255, 0, 0, 0.2) 100%);
   border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
   box-shadow: 0 0 14px #ff9900, 0 0 26px #ff4500, 0 0 40px rgba(255, 120, 0, 0.5);
   animation: flamePulsate3D 0.75s ease-in-out infinite alternate;
@@ -877,14 +976,32 @@
 }
 
 @keyframes flamePulsate3D {
-  0% { transform: scale(1) rotate(-3deg); filter: drop-shadow(0 0 8px #ffaa00); }
-  50% { transform: scale(1.12) rotate(2deg) skewX(2deg); filter: drop-shadow(0 0 14px #ff5500); }
-  100% { transform: scale(1.05) rotate(-2deg); filter: drop-shadow(0 0 10px #ff7700); }
+  0% {
+    transform: scale(1) rotate(-3deg);
+    filter: drop-shadow(0 0 8px #ffaa00);
+  }
+
+  50% {
+    transform: scale(1.12) rotate(2deg) skewX(2deg);
+    filter: drop-shadow(0 0 14px #ff5500);
+  }
+
+  100% {
+    transform: scale(1.05) rotate(-2deg);
+    filter: drop-shadow(0 0 10px #ff7700);
+  }
 }
 
 @keyframes auraPulsate {
-  0% { transform: scale(0.9); opacity: 0.6; }
-  100% { transform: scale(1.25); opacity: 1; }
+  0% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
 }
 
 /* Prompt Button */
@@ -1020,20 +1137,43 @@
 }
 
 @keyframes popIn {
-  0% { transform: scale(0.85); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes heartPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes floatSlow {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
 /* =========================================================
@@ -1085,9 +1225,20 @@
     width: 165px;
   }
 
-  .tier-top { width: 78px; height: 28px; }
-  .tier-middle { width: 108px; height: 32px; }
-  .tier-bottom { width: 135px; height: 36px; }
+  .tier-top {
+    width: 78px;
+    height: 28px;
+  }
+
+  .tier-middle {
+    width: 108px;
+    height: 32px;
+  }
+
+  .tier-bottom {
+    width: 135px;
+    height: 36px;
+  }
 
   .letter-title {
     font-size: 1.15rem;

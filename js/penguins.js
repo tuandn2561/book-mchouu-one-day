@@ -13,22 +13,22 @@ class PenguinHelper {
     this.x = startX;
     this.y = startY;
     this.manager = manager;
-    
+
     this.width = 64;
     this.height = 76;
     this.vx = (id % 2 === 0 ? 1 : -1) * (0.8 + Math.random() * 0.4);
     this.direction = this.vx >= 0 ? 1 : -1;
     this.state = 'WALKING'; // WALKING, IDLE, RUNNING_TO_PULL, PULLING, CELEBRATING
-    
+
     this.targetX = null;
     this.targetY = null;
     this.homeY = startY;
-    
+
     this.stateTimer = 0;
     this.idleDuration = 1500;
     this.sayTimer = null;
     this.pullProgress = 0;
-    
+
     this.createDOM();
   }
 
@@ -36,7 +36,7 @@ class PenguinHelper {
     this.el = document.createElement('div');
     this.el.className = 'cute-penguin';
     this.el.id = `penguin-${this.id}`;
-    
+
     let accessorySVG = '';
     if (this.accessory === 'bow') {
       accessorySVG = `
@@ -186,7 +186,7 @@ class PenguinHelper {
     this.bubbleEl.innerText = text;
     this.bubbleEl.classList.remove('hidden');
     this.bubbleEl.classList.add('pop-in');
-    
+
     if (this.sayTimer) clearTimeout(this.sayTimer);
     this.sayTimer = setTimeout(() => {
       if (this.bubbleEl) {
@@ -209,9 +209,9 @@ class PenguinHelper {
     if (this.state === 'WALKING') {
       const minX = 15;
       const maxX = screenW - this.width - 15;
-      
+
       this.x += this.vx;
-      
+
       if (this.x <= minX) {
         this.x = minX;
         this.vx = Math.abs(this.vx);
@@ -221,7 +221,7 @@ class PenguinHelper {
         this.vx = -Math.abs(this.vx);
         this.direction = -1;
       }
-      
+
       if (Math.random() < 0.005) {
         this.state = 'IDLE';
         this.stateTimer = 0;
@@ -230,7 +230,7 @@ class PenguinHelper {
       } else {
         this.el.classList.add('walking');
       }
-      
+
     } else if (this.state === 'IDLE') {
       if (this.stateTimer >= this.idleDuration) {
         this.state = 'WALKING';
@@ -238,17 +238,17 @@ class PenguinHelper {
         this.vx = (Math.random() > 0.5 ? 1 : -1) * (0.8 + Math.random() * 0.4);
         this.direction = this.vx >= 0 ? 1 : -1;
       }
-      
+
     } else if (this.state === 'RUNNING_TO_PULL') {
       this.el.classList.add('running');
       this.el.classList.remove('walking');
-      
+
       const dx = this.targetX - this.x;
       const dy = this.targetY - this.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      
+
       this.direction = dx >= 0 ? 1 : -1;
-      
+
       // Reach destination or safety timeout (500ms)
       if (dist < 25 || this.stateTimer > 500) {
         this.x = this.targetX;
@@ -259,7 +259,7 @@ class PenguinHelper {
         this.x += (dx / dist) * speed;
         this.y += (dy / dist) * speed;
       }
-      
+
     } else if (this.state === 'PULLING') {
       if (this.pullProgress !== undefined) {
         this.x = this.pullStartX + (this.pullEndX - this.pullStartX) * this.pullProgress;
@@ -268,7 +268,7 @@ class PenguinHelper {
       if (this.stateTimer > 750) {
         this.finishPulling();
       }
-      
+
     } else if (this.state === 'CELEBRATING') {
       if (this.stateTimer > 1300) {
         this.el.classList.remove('celebrating');
@@ -286,7 +286,7 @@ class PenguinHelper {
     if (this.el && this.el.style) {
       this.el.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
     }
-    
+
     // Scale only body wrapper so character faces walking direction
     if (this.bodyWrapper && this.bodyWrapper.style) {
       this.bodyWrapper.style.transform = `scaleX(${this.direction})`;
@@ -312,28 +312,28 @@ class PenguinHelper {
     this.stateTimer = 0;
     this.el.classList.remove('running');
     this.el.classList.add('pulling');
-    
+
     if (this.onArrivedToPull) {
       const cb = this.onArrivedToPull;
       this.onArrivedToPull = null;
       cb();
     }
-    
+
     const startTime = Date.now();
     const duration = 650;
-    
+
     const pullStep = () => {
       if (this.state !== 'PULLING') return;
       const elapsed = Date.now() - startTime;
       this.pullProgress = Math.min(1, elapsed / duration);
-      
+
       if (this.pullProgress < 1) {
         requestAnimationFrame(pullStep);
       } else {
         this.finishPulling();
       }
     };
-    
+
     requestAnimationFrame(pullStep);
   }
 
@@ -342,13 +342,13 @@ class PenguinHelper {
     this.state = 'CELEBRATING';
     this.stateTimer = 0;
     this.el.classList.add('celebrating');
-    
+
     if (this.onPullComplete) {
       const cb = this.onPullComplete;
       this.onPullComplete = null;
       cb();
     }
-    
+
     this.targetX = null;
     this.targetY = null;
     this.y = this.homeY;
@@ -368,12 +368,12 @@ class PenguinManager {
 
   init() {
     if (!this.container) return;
-    
+
     const w = window.innerWidth;
     const h = window.innerHeight;
     const isMobile = w <= 600;
     const floorY = h - (isMobile ? 54 : 85);
-    
+
     const configs = [
       { id: 1, name: "Poby Bé Nơ", acc: "bow", x: w * 0.10, y: floorY },
       { id: 2, name: "Bibi Mũ Tiệc", acc: "hat", x: w * 0.35, y: floorY },
@@ -382,10 +382,10 @@ class PenguinManager {
     ];
 
     this.penguins = configs.map(c => new PenguinHelper(c.id, c.name, c.acc, c.x, c.y, this));
-    
+
     this.lastTime = performance.now();
     this.loop();
-    
+
     window.addEventListener('resize', () => this.onResize());
   }
 
@@ -405,12 +405,12 @@ class PenguinManager {
   loop(currentTime = performance.now()) {
     const dt = Math.min(64, currentTime - this.lastTime);
     this.lastTime = currentTime;
-    
+
     const screenW = window.innerWidth;
     const screenH = window.innerHeight;
-    
+
     this.penguins.forEach(p => p.update(dt, screenW, screenH));
-    
+
     requestAnimationFrame((t) => this.loop(t));
   }
 
@@ -438,7 +438,7 @@ class PenguinManager {
 
     const rect = container.getBoundingClientRect();
     let startX, startY, endX, endY;
-    
+
     if (direction === 'next') {
       startX = Math.min(window.innerWidth - 70, rect.right - 20);
       startY = Math.max(80, rect.bottom - 45);
@@ -454,7 +454,7 @@ class PenguinManager {
     // Pick closest penguin
     let nearestPenguin = null;
     let minDist = Infinity;
-    
+
     this.penguins.forEach(p => {
       const d = Math.abs(p.x - startX);
       if (d < minDist) {

@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const envelopeBtn = document.getElementById('btn-open-envelope');
   const envelope = document.getElementById('intro-envelope');
   const mainStage = document.getElementById('main-app-stage');
-  
+
   const navPrev = document.getElementById('nav-prev-btn');
   const navNext = document.getElementById('nav-next-btn');
   const autoplayBtn = document.getElementById('btn-autoplay');
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const galleryCloseBtn = document.getElementById('gallery-close-btn');
   const themeToggleBtn = document.getElementById('btn-theme-toggle');
   const fullscreenBtn = document.getElementById('btn-fullscreen');
-  
+
   // Music controls
   const musicPlayBtn = document.getElementById('music-play-btn');
   const musicNextBtn = document.getElementById('music-next-btn');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.CONFIG) {
     const titleEl = document.getElementById('website-page-title');
     if (titleEl) titleEl.innerText = window.CONFIG.websiteTitle || "Happy Birthday!";
-    
+
     const introGreeting = document.getElementById('intro-greeting-text');
     if (introGreeting && window.CONFIG.intro) {
       introGreeting.innerText = window.CONFIG.intro.greeting;
@@ -57,15 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================
   const openGiftEnvelope = () => {
     if (!envelope || envelope.classList.contains('opened')) return;
-    
+
     envelope.classList.add('opened');
-    
+
     // Play SFX & Grand Confetti Burst
     if (window.audioManager) {
       window.audioManager.playCandleBlowSFX();
       window.audioManager.play();
     }
-    
+
     if (window.particleEngine) {
       window.particleEngine.triggerGrandCelebration(2500);
     }
@@ -77,10 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
         mainStage.classList.remove('hidden-stage');
         mainStage.classList.add('visible-stage');
       }
-      
+
       albumBook.updateContainerCentering();
       albumBook.handleVideoPlayback();
-      
+
       setTimeout(() => {
         if (introOverlay) introOverlay.style.display = 'none';
       }, 900);
@@ -144,11 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
     pages.forEach((page, idx) => {
       const item = document.createElement('div');
       item.className = 'gallery-thumbnail-card';
-      
+
       let thumbImg = 'media/1.jpg';
       let title = page.title || `Trang ${idx + 1}`;
       let isVid = page.type === 'video' || (page.src && page.src.endsWith('.mp4'));
-      
+
       if (page.type === 'cover') {
         thumbImg = page.coverImage || 'media/33.jpg';
         title = 'Bìa Sách ✨';
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.remove(themes[currentThemeIndex]);
       currentThemeIndex = (currentThemeIndex + 1) % themes.length;
       document.body.classList.add(themes[currentThemeIndex]);
-      
+
       const icons = ['🌸', '🌌', '🌅'];
       themeToggleBtn.innerHTML = `<span>${icons[currentThemeIndex]}</span>`;
       if (window.audioManager) window.audioManager.playPopSFX();
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (fullscreenBtn) {
     fullscreenBtn.addEventListener('click', () => {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {});
+        document.documentElement.requestFullscreen().catch(() => { });
         fullscreenBtn.innerHTML = '<span>⤓</span>';
       } else {
         if (document.exitFullscreen) {
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyParallax = () => {
       currentTiltX += (mouseY - currentTiltX) * 0.08;
       currentTiltY += (mouseX - currentTiltY) * 0.08;
-      
+
       const bookContainer = document.getElementById('book-container');
       if (bookContainer) {
         bookContainer.style.setProperty('--mouse-tilt-x', `${currentTiltX}deg`);

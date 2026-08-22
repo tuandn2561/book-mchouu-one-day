@@ -12,18 +12,18 @@ class AudioManager {
     this.isPlaying = false;
     this.isMuted = false;
     this.volume = (window.CONFIG && window.CONFIG.audio && window.CONFIG.audio.defaultVolume) || 0.7;
-    
+
     // HTML5 Audio
     this.audioElement = new Audio();
     this.audioElement.crossOrigin = "anonymous";
     this.audioElement.volume = this.volume;
     this.audioElement.loop = false;
-    
+
     // Web Audio API context for synthesized SFX & fallback music box
     this.audioCtx = null;
     this.isSynthPlaying = false;
     this.synthNotesTimer = null;
-    
+
     this.initAudioEvents();
   }
 
@@ -55,13 +55,13 @@ class AudioManager {
   play() {
     this.initContext();
     this.isPlaying = true;
-    
+
     if (this.playlist.length > 0) {
       const track = this.playlist[this.currentTrackIndex];
       if (this.audioElement.src !== track.src) {
         this.audioElement.src = track.src;
       }
-      
+
       const playPromise = this.audioElement.play();
       if (playPromise !== undefined) {
         playPromise.catch(err => {
@@ -72,7 +72,7 @@ class AudioManager {
     } else {
       this.startMusicBoxSynthesizer();
     }
-    
+
     this.updateUIState();
   }
 
@@ -134,12 +134,12 @@ class AudioManager {
     const vinyl = document.getElementById('music-vinyl');
     const titleEl = document.getElementById('music-track-title');
     const artistEl = document.getElementById('music-track-artist');
-    
+
     if (playBtn) {
       playBtn.innerHTML = this.isPlaying ? '⏸' : '▶';
       playBtn.setAttribute('title', this.isPlaying ? 'Tạm dừng nhạc' : 'Phát nhạc');
     }
-    
+
     if (vinyl) {
       if (this.isPlaying) {
         vinyl.classList.add('spinning');
@@ -147,7 +147,7 @@ class AudioManager {
         vinyl.classList.remove('spinning');
       }
     }
-    
+
     const info = this.getCurrentTrackInfo();
     if (titleEl) titleEl.innerText = info.title;
     if (artistEl) artistEl.innerText = info.artist || "";
@@ -161,18 +161,18 @@ class AudioManager {
     if (this.isSynthPlaying) return;
     this.initContext();
     if (!this.audioCtx) return;
-    
+
     this.isSynthPlaying = true;
     this.synthMasterGain = this.audioCtx.createGain();
     this.synthMasterGain.gain.setValueAtTime(this.isMuted ? 0 : this.volume * 0.35, this.audioCtx.currentTime);
     this.synthMasterGain.connect(this.audioCtx.destination);
-    
+
     // Notes frequency table
     const N = {
       C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
       C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00, B5: 987.77, C6: 1046.50
     };
-    
+
     // "Happy Birthday" + Sweet Lullaby melody sequence
     const melody = [
       { note: N.C4, dur: 0.35 }, { note: N.C4, dur: 0.25 }, { note: N.D4, dur: 0.6 }, { note: N.C4, dur: 0.6 }, { note: N.F4, dur: 0.6 }, { note: N.E4, dur: 1.1 },
@@ -188,7 +188,7 @@ class AudioManager {
     const playNextNote = () => {
       if (!this.isSynthPlaying || !this.audioCtx) return;
       const item = melody[step];
-      
+
       this.playChimeNote(item.note, item.dur * 0.9);
       // Play soft bass accompaniment every 2 beats
       if (step % 2 === 0) {
@@ -216,22 +216,22 @@ class AudioManager {
       const now = this.audioCtx.currentTime;
       const osc = this.audioCtx.createOscillator();
       const gain = this.audioCtx.createGain();
-      
+
       // Warm chime tone (sine wave + gentle harmonic)
       osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, now);
-      
+
       const noteVol = (this.volume * 0.25) * volumeScale;
       gain.gain.setValueAtTime(0.001, now);
       gain.gain.exponentialRampToValueAtTime(noteVol, now + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + duration + 0.3);
-      
+
       osc.connect(gain);
       gain.connect(this.synthMasterGain || this.audioCtx.destination);
-      
+
       osc.start(now);
       osc.stop(now + duration + 0.35);
-    } catch(e) {}
+    } catch (e) { }
   }
 
   // =========================================================
@@ -249,27 +249,27 @@ class AudioManager {
       for (let i = 0; i < bufferSize; i++) {
         output[i] = Math.random() * 2 - 1;
       }
-      
+
       const whiteNoise = this.audioCtx.createBufferSource();
       whiteNoise.buffer = buffer;
-      
+
       const filter = this.audioCtx.createBiquadFilter();
       filter.type = 'bandpass';
       filter.frequency.setValueAtTime(800, now);
       filter.frequency.exponentialRampToValueAtTime(350, now + 0.16);
       filter.Q.value = 2.5;
-      
+
       const gain = this.audioCtx.createGain();
       gain.gain.setValueAtTime(0.001, now);
       gain.gain.linearRampToValueAtTime(this.volume * 0.15, now + 0.04);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
-      
+
       whiteNoise.connect(filter);
       filter.connect(gain);
       gain.connect(this.audioCtx.destination);
-      
+
       whiteNoise.start(now);
-    } catch(e) {}
+    } catch (e) { }
   }
 
   playCandleBlowSFX() {
@@ -284,24 +284,24 @@ class AudioManager {
       for (let i = 0; i < bufferSize; i++) {
         data[i] = Math.random() * 2 - 1;
       }
-      
+
       const noise = this.audioCtx.createBufferSource();
       noise.buffer = buffer;
       const filter = this.audioCtx.createBiquadFilter();
       filter.type = 'lowpass';
       filter.frequency.setValueAtTime(500, now);
       filter.frequency.exponentialRampToValueAtTime(150, now + 0.35);
-      
+
       const gain = this.audioCtx.createGain();
       gain.gain.setValueAtTime(0.01, now);
       gain.gain.linearRampToValueAtTime(this.volume * 0.3, now + 0.08);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
-      
+
       noise.connect(filter);
       filter.connect(gain);
       gain.connect(this.audioCtx.destination);
       noise.start(now);
-      
+
       // 2. Magic sparkle chime cascade
       const chimeNotes = [523.25, 659.25, 783.99, 1046.5, 1318.5];
       chimeNotes.forEach((freq, idx) => {
@@ -309,7 +309,7 @@ class AudioManager {
           this.playChimeNote(freq, 0.4, 0.8);
         }, 150 + idx * 70);
       });
-    } catch(e) {}
+    } catch (e) { }
   }
 
   playPopSFX() {
@@ -319,20 +319,20 @@ class AudioManager {
       const now = this.audioCtx.currentTime;
       const osc = this.audioCtx.createOscillator();
       const gain = this.audioCtx.createGain();
-      
+
       osc.type = 'sine';
       osc.frequency.setValueAtTime(440, now);
       osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-      
+
       gain.gain.setValueAtTime(this.volume * 0.15, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-      
+
       osc.connect(gain);
       gain.connect(this.audioCtx.destination);
-      
+
       osc.start(now);
       osc.stop(now + 0.09);
-    } catch(e) {}
+    } catch (e) { }
   }
 }
 

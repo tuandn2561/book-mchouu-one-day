@@ -81,8 +81,15 @@
 }
 
 @keyframes bubblePopIn {
-  0% { transform: translateX(-50%) scale(0.4); opacity: 0; }
-  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  0% {
+    transform: translateX(-50%) scale(0.4);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
 }
 
 /* =========================================================
@@ -110,28 +117,53 @@
 }
 
 @keyframes chibiWaddle {
-  0% { transform: rotate(-8deg) translateY(0); }
-  100% { transform: rotate(8deg) translateY(-3px); }
+  0% {
+    transform: rotate(-8deg) translateY(0);
+  }
+
+  100% {
+    transform: rotate(8deg) translateY(-3px);
+  }
 }
 
 @keyframes chibiFootL {
-  0% { transform: translateY(-3.5px) rotate(-6deg); }
-  100% { transform: translateY(0) rotate(0deg); }
+  0% {
+    transform: translateY(-3.5px) rotate(-6deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
 }
 
 @keyframes chibiFootR {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(-3.5px) rotate(6deg); }
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  100% {
+    transform: translateY(-3.5px) rotate(6deg);
+  }
 }
 
 @keyframes chibiFlapL {
-  0% { transform: rotate(-15deg); }
-  100% { transform: rotate(20deg); }
+  0% {
+    transform: rotate(-15deg);
+  }
+
+  100% {
+    transform: rotate(20deg);
+  }
 }
 
 @keyframes chibiFlapR {
-  0% { transform: rotate(20deg); }
-  100% { transform: rotate(-15deg); }
+  0% {
+    transform: rotate(20deg);
+  }
+
+  100% {
+    transform: rotate(-15deg);
+  }
 }
 
 /* =========================================================
@@ -148,13 +180,23 @@
 }
 
 @keyframes chibiRun {
-  0% { transform: rotate(14deg) translateY(-4px) scaleX(1.05); }
-  100% { transform: rotate(20deg) translateY(2px) scaleX(0.95); }
+  0% {
+    transform: rotate(14deg) translateY(-4px) scaleX(1.05);
+  }
+
+  100% {
+    transform: rotate(20deg) translateY(2px) scaleX(0.95);
+  }
 }
 
 @keyframes chibiWingFast {
-  0% { transform: rotate(-30deg); }
-  100% { transform: rotate(40deg); }
+  0% {
+    transform: rotate(-30deg);
+  }
+
+  100% {
+    transform: rotate(40deg);
+  }
 }
 
 /* =========================================================
@@ -171,8 +213,13 @@
 }
 
 @keyframes chibiPullStrain {
-  0% { transform: rotate(-24deg) scaleX(0.92); }
-  100% { transform: rotate(-32deg) scaleX(1.06); }
+  0% {
+    transform: rotate(-24deg) scaleX(0.92);
+  }
+
+  100% {
+    transform: rotate(-32deg) scaleX(1.06);
+  }
 }
 
 /* =========================================================
@@ -192,18 +239,35 @@
 }
 
 @keyframes chibiCelebrate {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-26px) scale(1.18) rotate(12deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-26px) scale(1.18) rotate(12deg);
+  }
 }
 
 @keyframes chibiCheerL {
-  0% { transform: rotate(-50deg); }
-  100% { transform: rotate(-10deg); }
+  0% {
+    transform: rotate(-50deg);
+  }
+
+  100% {
+    transform: rotate(-10deg);
+  }
 }
 
 @keyframes chibiCheerR {
-  0% { transform: rotate(50deg); }
-  100% { transform: rotate(10deg); }
+  0% {
+    transform: rotate(50deg);
+  }
+
+  100% {
+    transform: rotate(10deg);
+  }
 }
 
 /* Responsive adjustments */

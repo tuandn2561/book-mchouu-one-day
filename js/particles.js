@@ -9,7 +9,7 @@ class ParticleEngine {
   constructor() {
     this.ambientCanvas = document.getElementById('particles-canvas');
     this.fireworksCanvas = document.getElementById('fireworks-canvas');
-    
+
     if (this.ambientCanvas) {
       this.ctx = this.ambientCanvas.getContext('2d');
     }
@@ -21,23 +21,23 @@ class ParticleEngine {
     this.fireworks = [];
     this.confetti = [];
     this.cursorTrails = [];
-    
+
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    
+
     this.init();
   }
 
   init() {
     this.resize();
     window.addEventListener('resize', () => this.resize());
-    
+
     // Create initial ambient particles
     this.createAmbientParticles(45);
-    
+
     // Setup mouse/touch cursor particle trail
     this.setupCursorEvents();
-    
+
     // Start animation loop
     this.animate();
   }
@@ -45,7 +45,7 @@ class ParticleEngine {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    
+
     if (this.ambientCanvas) {
       this.ambientCanvas.width = this.width;
       this.ambientCanvas.height = this.height;
@@ -65,7 +65,7 @@ class ParticleEngine {
   generateParticle(randomY = false) {
     const types = ['heart', 'petal', 'sparkle', 'star'];
     const type = types[Math.floor(Math.random() * types.length)];
-    
+
     return {
       x: Math.random() * this.width,
       y: randomY ? Math.random() * this.height : this.height + 20,
@@ -102,7 +102,7 @@ class ParticleEngine {
       const now = Date.now();
       if (now - lastTime < 30) return; // Throttling
       lastTime = now;
-      
+
       for (let i = 0; i < 2; i++) {
         this.cursorTrails.push({
           x: x + (Math.random() - 0.5) * 12,
@@ -132,7 +132,7 @@ class ParticleEngine {
     ctx.rotate(rotation);
     ctx.globalAlpha = opacity;
     ctx.fillStyle = color;
-    
+
     ctx.beginPath();
     const topCurveHeight = size * 0.3;
     ctx.moveTo(0, topCurveHeight);
@@ -159,7 +159,7 @@ class ParticleEngine {
     ctx.rotate(rotation);
     ctx.globalAlpha = opacity;
     ctx.fillStyle = color;
-    
+
     ctx.beginPath();
     ctx.ellipse(0, 0, size * 0.4, size * 0.8, 0, 0, Math.PI * 2);
     ctx.fill();
@@ -172,7 +172,7 @@ class ParticleEngine {
     ctx.rotate(rotation);
     ctx.globalAlpha = opacity;
     ctx.fillStyle = color;
-    
+
     ctx.beginPath();
     for (let i = 0; i < 4; i++) {
       ctx.rotate(Math.PI / 2);
@@ -212,14 +212,14 @@ class ParticleEngine {
   triggerFireworks(startX = null, startY = null) {
     const x = startX || (Math.random() * (this.width * 0.7) + this.width * 0.15);
     const targetY = startY || (Math.random() * (this.height * 0.4) + this.height * 0.15);
-    
+
     const colors = ['#ff4b72', '#ffd700', '#00e5ff', '#ff61d2', '#a0e7e5', '#b4f8c8', '#fbe7c6'];
     const color = colors[Math.floor(Math.random() * colors.length)];
-    
+
     // Create explosion particles at target
     const particleCount = 60;
     const isHeartShape = Math.random() > 0.4;
-    
+
     for (let i = 0; i < particleCount; i++) {
       let vx, vy;
       if (isHeartShape) {
@@ -234,7 +234,7 @@ class ParticleEngine {
         vx = Math.cos(angle) * speed;
         vy = Math.sin(angle) * speed;
       }
-      
+
       this.fireworks.push({
         x: x,
         y: targetY,
@@ -267,18 +267,18 @@ class ParticleEngine {
   // ==========================================
   animate() {
     requestAnimationFrame(() => this.animate());
-    
+
     // --- 1. Draw Ambient Particles ---
     if (this.ctx) {
       this.ctx.clearRect(0, 0, this.width, this.height);
-      
+
       for (let i = this.particles.length - 1; i >= 0; i--) {
         const p = this.particles[i];
         p.y -= p.speedY;
         p.sway += p.swaySpeed;
         p.x += Math.sin(p.sway) * p.swayWidth + p.speedX;
         p.rotation += p.rotationSpeed;
-        
+
         if (p.type === 'heart') {
           this.drawHeart(this.ctx, p.x, p.y, p.size, p.color, p.opacity, p.rotation);
         } else if (p.type === 'petal') {
@@ -286,25 +286,25 @@ class ParticleEngine {
         } else {
           this.drawSparkle(this.ctx, p.x, p.y, p.size, p.color, p.opacity, p.rotation);
         }
-        
+
         // Reset when out of top screen
         if (p.y < -30) {
           this.particles[i] = this.generateParticle(false);
         }
       }
-      
+
       // Draw cursor trails
       for (let i = this.cursorTrails.length - 1; i >= 0; i--) {
         const t = this.cursorTrails[i];
         t.x += t.speedX;
         t.y += t.speedY;
         t.life -= t.decay;
-        
+
         if (t.life <= 0) {
           this.cursorTrails.splice(i, 1);
           continue;
         }
-        
+
         if (t.type === 'heart') {
           this.drawHeart(this.ctx, t.x, t.y, t.size * t.life, t.color, t.life);
         } else {
@@ -312,11 +312,11 @@ class ParticleEngine {
         }
       }
     }
-    
+
     // --- 2. Draw Fireworks & Confetti Canvas ---
     if (this.fCtx) {
       this.fCtx.clearRect(0, 0, this.width, this.height);
-      
+
       // Fireworks particles
       for (let i = this.fireworks.length - 1; i >= 0; i--) {
         const fw = this.fireworks[i];
@@ -324,12 +324,12 @@ class ParticleEngine {
         fw.y += fw.vy;
         fw.vy += fw.gravity;
         fw.alpha -= fw.decay;
-        
+
         if (fw.alpha <= 0) {
           this.fireworks.splice(i, 1);
           continue;
         }
-        
+
         this.fCtx.save();
         this.fCtx.globalAlpha = fw.alpha;
         this.fCtx.fillStyle = fw.color;
@@ -340,7 +340,7 @@ class ParticleEngine {
         this.fCtx.fill();
         this.fCtx.restore();
       }
-      
+
       // Confetti pieces
       for (let i = this.confetti.length - 1; i >= 0; i--) {
         const c = this.confetti[i];
@@ -350,12 +350,12 @@ class ParticleEngine {
         c.vy += c.gravity;
         c.rotation += c.rotSpeed;
         c.life -= c.decay;
-        
+
         if (c.life <= 0 || c.y > this.height + 50) {
           this.confetti.splice(i, 1);
           continue;
         }
-        
+
         this.fCtx.save();
         this.fCtx.translate(c.x, c.y);
         this.fCtx.rotate(c.rotation);

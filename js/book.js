@@ -15,7 +15,7 @@ class AlbumBook {
     this.container = document.getElementById(containerId);
     this.bookEl = document.getElementById(bookElId);
     this.pagesData = (window.CONFIG && window.CONFIG.pages) || [];
-    
+
     // Core State
     this.currentPageIndex = 0; // 0 = Cover, 1..totalSheets-1 = Spreads, totalSheets = Back Cover
     this.totalSheets = 0;
@@ -161,7 +161,7 @@ class AlbumBook {
 
   renderCakePage(data, pageNum, totalPages) {
     const recipientName = (window.CONFIG && window.CONFIG.recipientName) || 'Khánh Linh';
-    const blownMsg = (window.CONFIG && window.CONFIG.cake && window.CONFIG.cake.blownMessage) || 
+    const blownMsg = (window.CONFIG && window.CONFIG.cake && window.CONFIG.cake.blownMessage) ||
       'Chúc mừng sinh nhật Khánh Linh (Mchouu) tuổi 19 luôn luôn hạnh phúc, rạng rỡ và đạt được mọi ước mơ! 🎂✨🎉';
 
     return `
@@ -366,7 +366,7 @@ class AlbumBook {
     const stickersHTML = (data.stickers || ['🌸', '✨', '🤎'])
       .map((s, idx) => `<span class="page-sticker sticker-${idx + 1}">${s}</span>`)
       .join('');
-      
+
     const rot = data.rotation || 0;
     const tapeColor = data.tape || 'mocha';
 
@@ -847,7 +847,7 @@ class AlbumBook {
   // =========================================================
   handleVideoPlayback() {
     const allVideos = this.bookEl.querySelectorAll('video');
-    
+
     allVideos.forEach(vid => {
       vid.pause();
       vid.style.display = 'none';
@@ -865,7 +865,7 @@ class AlbumBook {
       const leftVid = leftSheet.backFace.querySelector('video');
       if (leftVid) {
         leftVid.style.display = 'block';
-        leftVid.play().catch(() => {});
+        leftVid.play().catch(() => { });
       }
     }
 
@@ -873,7 +873,7 @@ class AlbumBook {
       const rightVid = rightSheet.frontFace.querySelector('video');
       if (rightVid) {
         rightVid.style.display = 'block';
-        rightVid.play().catch(() => {});
+        rightVid.play().catch(() => { });
       }
     }
   }
