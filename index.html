@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy Birthday Bùi Khánh Linh (Mchouu) 🎂✨ Món Quà Kỷ Niệm 22/08/2007</title>
+  
+  <!-- SEO & Social Meta Tags -->
+  <meta name="description" content="Cuốn album kỷ niệm 3D lật trang và những lời chúc ngọt ngào nhất nhân ngày sinh nhật 22/08 của Bùi Khánh Linh (Mchouu) 🤎" />
+  <meta property="og:title" content="Happy Birthday Bùi Khánh Linh (Mchouu) ✨🎂" />
+  <meta property="og:description" content="Món quà sinh nhật đặc biệt dành riêng cho Khánh Linh 💖" />
+  <meta property="og:type" content="website" />
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎂</text></svg>">
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/book.css" />
+</head>
+<body>
+
+  <!-- Background Particle & Sparkle Canvas -->
+  <canvas id="particles-canvas"></canvas>
+  <!-- Fullscreen Fireworks & Confetti Canvas -->
+  <canvas id="fireworks-canvas"></canvas>
+
+  <!-- =========================================================
+       💌 1. MÀN HÌNH MỞ QUÀ BÍ MẬT (INTRO ENVELOPE)
+       ========================================================= -->
+  <div class="intro-overlay" id="intro-overlay">
+    <div class="intro-content">
+      <div class="intro-badge" id="intro-badge-text">Special Birthday Gift 💖</div>
+      <h1 class="intro-greeting" id="intro-greeting-text">Gửi Bùi Khánh Linh (Mchouu) ✨</h1>
+      <p class="intro-hint" id="intro-hint-text">
+        Anh có một món quà bí mật muốn dành tặng em nhân ngày sinh nhật 22/08 đặc biệt này. Chạm nhẹ vào phong bì để mở ra nhé! 💌
+      </p>
+      
+      <!-- 3D Interactive Envelope -->
+      <div class="envelope-wrapper" id="intro-envelope">
+        <div class="envelope">
+          <div class="envelope-flap"></div>
+          <div class="wax-seal-btn" id="intro-wax-seal">💌</div>
+          <div class="envelope-letter">
+            <div class="letter-inner-heart">🤎</div>
+            <div class="letter-inner-text">Happy Birthday Khánh Linh ✨</div>
+          </div>
+          <div class="envelope-pocket"></div>
+        </div>
+      </div>
+
+      <button class="intro-open-btn" id="btn-open-envelope">
+        <span>Mở Hộp Quà Bí Mật 🎁</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       🌟 2. GIAO DIỆN CHÍNH (MAIN APP STAGE)
+       ========================================================= -->
+  <div class="main-stage hidden-stage" id="main-app-stage">
+    
+    <!-- Top Bar: Brand & Music Dock & Actions -->
+    <header class="top-bar">
+      <div class="top-brand">
+        <span class="brand-icon">🎂</span>
+        <span class="brand-title" id="website-page-title">Happy Birthday Mchouu</span>
+      </div>
+
+      <!-- Music Player Floating Dock -->
+      <div class="music-dock">
+        <div class="music-vinyl" id="music-vinyl">🎵</div>
+        <div class="music-details">
+          <span class="track-title" id="music-track-title">Happy Birthday Melody</span>
+          <span class="track-artist" id="music-track-artist">Acoustic Love</span>
+        </div>
+        <div class="music-controls">
+          <button class="music-btn" id="music-play-btn" title="Phát/Dừng">▶</button>
+          <button class="music-btn" id="music-next-btn" title="Bài tiếp">⏭</button>
+          <button class="music-btn" id="music-mute-btn" title="Âm lượng">🔊</button>
+          <input type="range" class="volume-slider" id="music-volume-slider" min="0" max="1" step="0.05" value="0.7" title="Chỉnh âm lượng" />
+        </div>
+      </div>
+
+      <!-- Top Right Action Buttons -->
+      <div class="top-actions">
+        <button class="icon-btn" id="btn-gallery-drawer" title="Xem tất cả ảnh">🖼️</button>
+        <button class="icon-btn" id="btn-theme-toggle" title="Đổi màu nền">🌸</button>
+        <button class="icon-btn" id="btn-fullscreen" title="Toàn màn hình">⤢</button>
+      </div>
+    </header>
+
+    <!-- Center Stage: 3D Scrapbook Album -->
+    <main class="book-stage-wrapper">
+      <div class="book-container" id="book-container">
+        <div class="album-book" id="album-book">
+          <!-- Sheets and Pages will be dynamically built from config.js -->
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Control Dock: Navigation, Progress Bar, Autoplay -->
+    <footer class="bottom-control-container">
+      <div class="book-progress-wrapper">
+        <div class="book-progress-fill" id="book-progress-fill"></div>
+      </div>
+
+      <div class="bottom-control-dock">
+        <button class="nav-btn" id="nav-prev-btn" title="Trang trước">
+          <span>❮ Trang Trước</span>
+        </button>
+        
+        <div class="page-indicator-badge" id="page-indicator-text">
+          Bìa Sách (Cover)
+        </div>
+
+        <button class="nav-btn" id="nav-next-btn" title="Trang tiếp theo">
+          <span>Trang Sau ❯</span>
+        </button>
+
+        <button class="icon-btn" id="btn-autoplay" title="Tự động lật trang">
+          <span>⏳</span>
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- =========================================================
+       🖼️ 3. MODAL GALLERY XEM NHANH TẤT CẢ TRANG
+       ========================================================= -->
+  <div class="gallery-modal" id="gallery-modal">
+    <div class="gallery-modal-content">
+      <div class="gallery-header">
+        <h2 class="gallery-title">Bộ Sưu Tập Kỷ Niệm 💖</h2>
+        <button class="gallery-close-btn" id="gallery-close-btn" title="Đóng">✕</button>
+      </div>
+      <div class="gallery-grid" id="gallery-grid-content">
+        <!-- Thumbnails rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       📜 SCRIPTS
+       ========================================================= -->
+  <script src="js/config.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/book.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

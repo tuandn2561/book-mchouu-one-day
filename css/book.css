@@ -1,0 +1,886 @@
+/* =========================================================
+   📖 3D SCRAPBOOK FLIPBOOK STYLES (BALANCED CENTERING & EARTH/MOCHA TONES) 📖
+   Perfect Center Alignment, 3D Tilt, Mocha Leather & Autoplay Media
+   ========================================================= */
+
+.book-stage-wrapper {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 2200px;
+  perspective-origin: 50% 50%;
+  padding: 10px;
+  overflow: visible;
+}
+
+/* 3D Book Container with dynamic centering states */
+.book-container {
+  position: relative;
+  width: 370px;
+  height: 530px;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), filter 0.8s ease;
+  filter: drop-shadow(0 25px 35px rgba(60, 30, 20, 0.22));
+}
+
+/* 🌟 DYNAMIC CENTERING FOR CLOSED VS OPEN STATES 🌟 */
+/* 1. Bìa trước (Closed Cover): Dịch sang trái 50% độ rộng để trang bìa nằm chính giữa màn hình */
+.book-container.state-cover {
+  transform: translateX(-50%) rotateX(4deg) rotateY(-2deg);
+}
+
+/* 2. Sách mở (Open 2-Page Spread): Căn giữa đối xứng 2 bên (Spine ở đúng chính giữa) */
+.book-container.state-open {
+  transform: translateX(0) rotateX(4deg);
+}
+
+/* 3. Bìa sau (Closed Back Cover): Dịch sang phải 50% độ rộng để trang bìa sau nằm chính giữa màn hình */
+.book-container.state-back {
+  transform: translateX(50%) rotateX(4deg) rotateY(2deg);
+}
+
+.book-container:hover {
+  filter: drop-shadow(0 30px 45px rgba(60, 30, 20, 0.32));
+}
+
+/* Album Spine & Real Leather Mocha/Brown Binding */
+.book-container::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: -14px;
+  width: 24px;
+  height: calc(100% - 4px);
+  background: linear-gradient(to right, #4a2820, #6f3f33 45%, #9e5f4c 85%, #4a2820 100%);
+  border-radius: 8px 0 0 8px;
+  box-shadow: -6px 0 15px rgba(40, 20, 10, 0.4);
+  z-index: 1;
+}
+
+/* Golden Stitched Ridge on Spine */
+.book-container::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: -8px;
+  width: 2px;
+  height: calc(100% - 24px);
+  background: repeating-linear-gradient(to bottom, #ffd700, #ffd700 8px, transparent 8px, transparent 14px);
+  opacity: 0.75;
+  z-index: 2;
+}
+
+.album-book {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* 3D Sheet Structure */
+.book-sheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.85s ease;
+  cursor: pointer;
+}
+
+.book-sheet.flipped {
+  transform: rotateY(-180deg);
+}
+
+.sheet-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 0 14px 14px 0;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(60, 30, 20, 0.16), inset 16px 0 20px -10px rgba(80, 45, 30, 0.12);
+}
+
+.sheet-front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.sheet-back {
+  z-index: 1;
+  transform: rotateY(180deg);
+  border-radius: 14px 0 0 14px;
+  box-shadow: 0 12px 32px rgba(60, 30, 20, 0.16), inset -16px 0 20px -10px rgba(80, 45, 30, 0.12);
+}
+
+/* =========================================================
+   📄 SCRAPBOOK PAGE GENERAL STYLING
+   ========================================================= */
+
+.scrapbook-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #fffdfa;
+  background-image: radial-gradient(#eadacf 1.2px, transparent 1.2px);
+  background-size: 16px 16px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border: 1px solid #efe3d8;
+}
+
+/* Blank fallback */
+.blank-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.blank-heart {
+  font-size: 3rem;
+  opacity: 0.35;
+  animation: heartPulse 2s infinite;
+}
+
+/* Page Header & Footer */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 5;
+}
+
+.page-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #7c4738;
+  background: rgba(212, 163, 115, 0.25);
+  border: 1px solid rgba(186, 133, 84, 0.35);
+  padding: 3px 10px;
+  border-radius: 14px;
+  letter-spacing: 0.5px;
+}
+
+.page-number {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #9c6644;
+}
+
+.page-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  z-index: 5;
+}
+
+.page-date {
+  font-size: 0.72rem;
+  color: #8a5a44;
+  font-weight: 600;
+}
+
+.page-heart-btn {
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.page-heart-btn:hover {
+  transform: scale(1.3);
+}
+
+.heart-burst {
+  animation: heartPop 0.5s ease;
+}
+
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.6); }
+  100% { transform: scale(1); }
+}
+
+/* =========================================================
+   🎀 WASHI TAPE & STICKERS
+   ========================================================= */
+
+.washi-tape {
+  position: absolute;
+  width: 70px;
+  height: 20px;
+  opacity: 0.88;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(60, 30, 20, 0.12);
+}
+
+.washi-tape.mocha {
+  background: rgba(141, 91, 76, 0.82);
+  border-left: 2px dashed rgba(255, 235, 220, 0.9);
+  border-right: 2px dashed rgba(255, 235, 220, 0.9);
+}
+
+.washi-tape.caramel {
+  background: rgba(212, 163, 115, 0.88);
+  border-left: 2px dashed rgba(255, 255, 255, 0.9);
+  border-right: 2px dashed rgba(255, 255, 255, 0.9);
+}
+
+.washi-tape.brown {
+  background: rgba(111, 78, 55, 0.82);
+  border-left: 2px dashed rgba(255, 230, 200, 0.9);
+  border-right: 2px dashed rgba(255, 230, 200, 0.9);
+}
+
+.washi-tape.pink {
+  background: rgba(255, 182, 193, 0.82);
+  border-left: 2px dashed rgba(255, 255, 255, 0.9);
+  border-right: 2px dashed rgba(255, 255, 255, 0.9);
+}
+
+.washi-tape.gold {
+  background: rgba(230, 180, 60, 0.82);
+  border-left: 2px dashed rgba(255, 255, 255, 0.9);
+  border-right: 2px dashed rgba(255, 255, 255, 0.9);
+}
+
+.tape-top-left {
+  top: -8px;
+  left: 18px;
+  transform: rotate(-8deg);
+}
+
+.tape-top-right {
+  top: -8px;
+  right: 18px;
+  transform: rotate(8deg);
+}
+
+.stickers-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.page-sticker {
+  position: absolute;
+  font-size: 1.4rem;
+  filter: drop-shadow(0 3px 6px rgba(70, 35, 20, 0.15));
+  animation: floatSlow 3s ease-in-out infinite alternate;
+}
+
+.sticker-1 { top: 40px; right: 20px; transform: rotate(12deg); }
+.sticker-2 { bottom: 55px; left: 16px; transform: rotate(-10deg); }
+.sticker-3 { bottom: 45px; right: 24px; transform: rotate(15deg); }
+
+/* =========================================================
+   📷 POLAROID PHOTO & AUTO-LOOP VIDEO CARD
+   ========================================================= */
+
+.polaroid-card {
+  position: relative;
+  background: #ffffff;
+  padding: 8px 8px 12px 8px;
+  border-radius: 4px;
+  box-shadow: 0 8px 22px rgba(70, 40, 30, 0.12), 0 2px 5px rgba(70, 40, 30, 0.05);
+  border: 1px solid #f2e6dc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 6px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 6;
+}
+
+.polaroid-card:hover {
+  box-shadow: 0 12px 28px rgba(141, 91, 76, 0.22);
+}
+
+.polaroid-pin {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.15rem;
+  filter: drop-shadow(0 2px 4px rgba(60, 30, 20, 0.2));
+  z-index: 12;
+}
+
+.polaroid-media-box {
+  position: relative;
+  width: 100%;
+  height: 270px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #15110e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.polaroid-card:hover .page-photo {
+  transform: scale(1.03);
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background: #000;
+  overflow: hidden;
+}
+
+.page-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+  display: block;
+}
+
+.video-play-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  background: rgba(141, 91, 76, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.polaroid-caption-area {
+  width: 100%;
+  text-align: center;
+  padding: 8px 4px 0 4px;
+}
+
+.polaroid-title {
+  font-family: var(--font-handwriting);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #7c4738;
+  margin-bottom: 2px;
+}
+
+.polaroid-caption {
+  font-size: 0.8rem;
+  color: #5c4438;
+  line-height: 1.38;
+  font-weight: 600;
+}
+
+/* =========================================================
+   📕 BOOK COVER (FRONT & BACK)
+   ========================================================= */
+
+.cover-page {
+  background: linear-gradient(135deg, #8d5b4c 0%, #6f3f33 50%, #4a2820 100%);
+  color: #fff;
+  border-radius: 0 14px 14px 0;
+  border: 4px solid #faedcd;
+  padding: 20px 16px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.35);
+}
+
+.cover-border {
+  border: 2px dashed rgba(255, 215, 0, 0.6);
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 16px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cover-badge {
+  background: linear-gradient(135deg, #ffd700, #d4a373);
+  color: #3e2119;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+.cover-photo-frame {
+  position: relative;
+  width: 165px;
+  height: 165px;
+  border-radius: 50%;
+  border: 4px solid #faedcd;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  margin: 8px 0;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover-title {
+  font-family: var(--font-script);
+  font-size: 2.1rem;
+  color: #fff4ea;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  margin-top: 4px;
+}
+
+.cover-subtitle {
+  font-size: 0.85rem;
+  color: #faedcd;
+  font-weight: 600;
+}
+
+.cover-quote {
+  font-family: var(--font-handwriting);
+  font-size: 1.1rem;
+  color: #f7d6bf;
+  font-style: italic;
+}
+
+.cover-tap-hint {
+  font-size: 0.75rem;
+  color: rgba(255, 235, 220, 0.9);
+  animation: floatSlow 2s infinite ease-in-out;
+}
+
+.bookmark-ribbon {
+  position: absolute;
+  top: 0;
+  right: 22px;
+  width: 20px;
+  height: 60px;
+  background: linear-gradient(180deg, #ffd700, #d4a373);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+/* Back cover */
+.back-cover-page {
+  background: linear-gradient(135deg, #4a2820 0%, #6f3f33 50%, #8d5b4c 100%);
+  color: #fff;
+  border-radius: 14px 0 0 14px;
+  border: 4px solid #faedcd;
+  padding: 20px 16px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.35);
+}
+
+.back-cover-heart {
+  font-size: 2.8rem;
+  animation: heartPulse 1.5s infinite;
+}
+
+.back-cover-title {
+  font-family: var(--font-script);
+  font-size: 2.2rem;
+  color: #fff4ea;
+  margin-top: 8px;
+}
+
+.back-cover-subtitle {
+  font-size: 0.9rem;
+  color: #faedcd;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+
+.back-cover-tag {
+  background: rgba(212, 163, 115, 0.35);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  padding: 5px 16px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffe8d6;
+}
+
+.back-cover-footer {
+  font-size: 0.78rem;
+  color: #ddb892;
+}
+
+.replay-btn {
+  padding: 9px 22px;
+  background: linear-gradient(135deg, #faedcd, #ffd700);
+  color: #4a2820;
+  border: none;
+  border-radius: 30px;
+  font-family: var(--font-main);
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease;
+}
+
+.replay-btn:hover {
+  transform: scale(1.08);
+}
+
+/* =========================================================
+   🎂 3D BIRTHDAY CAKE & CANDLE PAGE
+   ========================================================= */
+
+.cake-page {
+  text-align: center;
+  align-items: center;
+}
+
+.cake-page-title {
+  font-family: var(--font-script);
+  font-size: 1.9rem;
+  color: #7c4738;
+  margin-top: 6px;
+}
+
+.cake-page-subtitle {
+  font-size: 0.82rem;
+  color: #8a5a44;
+  margin-bottom: 8px;
+}
+
+.cake-interactive-stage {
+  position: relative;
+  width: 210px;
+  height: 190px;
+  margin: 8px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.cake-plate {
+  position: absolute;
+  bottom: 0;
+  width: 200px;
+  height: 16px;
+  background: radial-gradient(ellipse at center, #ffffff 60%, #e0e0e0 100%);
+  border-radius: 50%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.cake-body {
+  position: relative;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.cake-layer {
+  position: relative;
+  border-radius: 10px 10px 5px 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.cake-layer-bottom {
+  width: 160px;
+  height: 48px;
+  background: linear-gradient(180deg, #d4a373 0%, #8d5b4c 100%);
+}
+
+.cake-layer-middle {
+  width: 130px;
+  height: 42px;
+  background: linear-gradient(180deg, #fff0f5 0%, #ffd1dc 100%);
+  margin-top: -6px;
+}
+
+.cake-layer-top {
+  width: 100px;
+  height: 38px;
+  background: linear-gradient(180deg, #ff758c 0%, #7c4738 100%);
+  margin-top: -6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cake-strawberries {
+  display: flex;
+  gap: 6px;
+  font-size: 1rem;
+  margin-top: -14px;
+}
+
+/* Candles & Animated Flames */
+.candles-wrapper {
+  position: absolute;
+  top: 10px;
+  display: flex;
+  gap: 18px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.candle {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.candle:hover {
+  transform: translateY(-3px);
+}
+
+.candle-stick {
+  width: 9px;
+  height: 36px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.candle-pink {
+  background: repeating-linear-gradient(45deg, #ff758c, #ff758c 4px, #ffffff 4px, #ffffff 8px);
+}
+
+.candle-gold {
+  background: repeating-linear-gradient(45deg, #d4a373, #d4a373 4px, #ffffff 4px, #ffffff 8px);
+}
+
+.wick {
+  width: 2px;
+  height: 7px;
+  background: #333;
+}
+
+.flame {
+  width: 13px;
+  height: 22px;
+  background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffe600 30%, #ff5e00 80%, transparent 100%);
+  border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+  box-shadow: 0 0 16px #ff9900, 0 0 30px #ff3300;
+  animation: flamePulsate 0.8s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.flame.blown-out {
+  transform: scale(0);
+  opacity: 0;
+}
+
+@keyframes flamePulsate {
+  0% { transform: scale(1) rotate(-2deg); }
+  100% { transform: scale(1.15) rotate(2deg); }
+}
+
+.blow-candle-btn {
+  padding: 9px 20px;
+  font-family: var(--font-main);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #8d5b4c, #d4a373);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(141, 91, 76, 0.4);
+  transition: transform 0.25s ease;
+}
+
+.blow-candle-btn:hover {
+  transform: scale(1.06);
+}
+
+.cake-wish-result {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: #fff8f0;
+  border-radius: 12px;
+  border: 1px dashed #8d5b4c;
+}
+
+.wish-blessing-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #7c4738;
+  line-height: 1.4;
+  margin-top: 3px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =========================================================
+   💌 PARCHMENT LOVE LETTER PAGE
+   ========================================================= */
+
+.letter-page {
+  padding: 18px 16px;
+}
+
+.parchment-letter-wrapper {
+  position: relative;
+  flex: 1;
+  background: #fffdf7;
+  border: 1px solid #e6ccb2;
+  border-radius: 10px;
+  padding: 16px 14px;
+  margin: 8px 0;
+  box-shadow: inset 0 0 20px rgba(212, 163, 115, 0.2), 0 4px 15px rgba(60, 30, 20, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.letter-stamp {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 1.4rem;
+}
+
+.letter-date {
+  font-family: var(--font-handwriting);
+  font-size: 1.05rem;
+  color: #8a5a44;
+  text-align: right;
+  margin-right: 28px;
+}
+
+.letter-title {
+  font-family: var(--font-script);
+  font-size: 1.6rem;
+  color: #7c4738;
+  margin-bottom: 8px;
+}
+
+.letter-content {
+  font-family: var(--font-handwriting);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #4a2820;
+  overflow-y: auto;
+  max-height: 230px;
+  padding-right: 4px;
+}
+
+.letter-content p {
+  margin-bottom: 6px;
+}
+
+.letter-signature {
+  font-family: var(--font-script);
+  font-size: 1.35rem;
+  color: #8d5b4c;
+  text-align: right;
+  margin-top: 6px;
+}
+
+.wax-seal {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  width: 38px;
+  height: 38px;
+  background: radial-gradient(circle, #d4a373, #7c4738);
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(70, 35, 20, 0.4);
+}
+
+/* =========================================================
+   📱 RESPONSIVE ADJUSTMENTS FOR BALANCED ALBUM
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .book-container {
+    width: 310px;
+    height: 470px;
+  }
+  .book-container.state-cover {
+    transform: translateX(-50%) rotateX(2deg);
+  }
+  .book-container.state-open {
+    transform: translateX(0) rotateX(2deg);
+  }
+  .book-container.state-back {
+    transform: translateX(50%) rotateX(2deg);
+  }
+  .polaroid-media-box {
+    height: 210px;
+  }
+  .cover-photo-frame {
+    width: 130px;
+    height: 130px;
+  }
+  .cover-title {
+    font-size: 1.7rem;
+  }
+  .polaroid-title {
+    font-size: 1.1rem;
+  }
+  .polaroid-caption {
+    font-size: 0.75rem;
+  }
+  .letter-content {
+    font-size: 0.98rem;
+    max-height: 180px;
+  }
+}
+
+@media (max-width: 380px) {
+  .book-container {
+    width: 275px;
+    height: 430px;
+  }
+  .polaroid-media-box {
+    height: 180px;
+  }
+}
