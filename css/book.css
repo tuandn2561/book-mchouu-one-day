@@ -31,41 +31,41 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  perspective: 2500px;
-  perspective-origin: 50% 50%;
+  perspective: 1800px;
+  perspective-origin: 50% 38%;
   overflow: visible;
-  padding: 10px 0;
+  padding: 15px 0;
 }
 
-/* 🌟 THE 2-PAGE SPREAD CONTAINER (Always Centered) 🌟 */
+/* 🌟 THE 2-PAGE SPREAD CONTAINER (Always Centered with Realistic 3D Tilt) 🌟 */
 .book-container {
   position: relative;
   width: var(--book-spread-w);
   height: var(--page-h);
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), filter 0.8s ease;
-  filter: drop-shadow(0 25px 35px rgba(60, 30, 20, 0.22));
+  transition: transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), filter 0.85s ease;
+  filter: drop-shadow(0 28px 45px rgba(50, 25, 15, 0.28));
 }
 
-/* 🌟 DYNAMIC MATHEMATICAL CENTERING 🌟
-   - Cover: Dịch sang trái 1/4 độ rộng toàn bộ spread (tức là đúng nửa trang) để trang bìa nằm chính xác 100% giữa màn hình!
-   - Open: Nằm đúng giữa màn hình (Spine ở tọa độ 50% chính giữa)
-   - Back Cover: Dịch sang phải 1/4 độ rộng spread để trang bìa sau nằm chính xác giữa màn hình!
+/* 🌟 DYNAMIC 3D ISOMETRIC TILT & MATHEMATICAL CENTERING 🌟
+   - Cover: Dịch sang trái nửa trang + nghiêng 3D 14deg ngửa ra sau & xoay nhẹ -6deg
+   - Open: Căn giữa đối xứng + nghiêng 3D 14deg ngửa ra sau như cuốn sách thật đặt trên bàn
+   - Back Cover: Dịch sang phải nửa trang + nghiêng 3D 14deg & xoay nhẹ 6deg
 */
 .book-container.state-cover {
-  transform: translateX(calc(-1 * var(--page-w) / 2)) rotateX(3deg);
+  transform: translateX(calc(-1 * var(--page-w) / 2)) rotateX(calc(14deg + var(--mouse-tilt-x, 0deg))) rotateY(calc(-6deg + var(--mouse-tilt-y, 0deg))) rotateZ(-0.8deg);
 }
 
 .book-container.state-open {
-  transform: translateX(0) rotateX(3deg);
+  transform: translateX(0) rotateX(calc(14deg + var(--mouse-tilt-x, 0deg))) rotateY(var(--mouse-tilt-y, 0deg)) rotateZ(0deg);
 }
 
 .book-container.state-back {
-  transform: translateX(calc(var(--page-w) / 2)) rotateX(3deg);
+  transform: translateX(calc(var(--page-w) / 2)) rotateX(calc(14deg + var(--mouse-tilt-x, 0deg))) rotateY(calc(6deg + var(--mouse-tilt-y, 0deg))) rotateZ(0.8deg);
 }
 
 .book-container:hover {
-  filter: drop-shadow(0 30px 45px rgba(60, 30, 20, 0.32));
+  filter: drop-shadow(0 35px 55px rgba(50, 25, 15, 0.38));
 }
 
 /* Album Spine (Gáy sách) đặt đúng vị trí 50% chính giữa */

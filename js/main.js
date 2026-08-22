@@ -232,4 +232,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // =========================================================
+  // 🌟 7. INTERACTIVE 3D PARALLAX TILT ON MOUSE MOVE
+  // =========================================================
+  const bookStageWrapper = document.querySelector('.book-stage-wrapper');
+  if (bookStageWrapper) {
+    let mouseX = 0, mouseY = 0;
+    let currentTiltX = 0, currentTiltY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 6; // ±3 deg
+      mouseY = (e.clientY / window.innerHeight - 0.5) * -6; // ±3 deg
+    }, { passive: true });
+
+    const applyParallax = () => {
+      currentTiltX += (mouseY - currentTiltX) * 0.08;
+      currentTiltY += (mouseX - currentTiltY) * 0.08;
+      
+      const bookContainer = document.getElementById('book-container');
+      if (bookContainer) {
+        bookContainer.style.setProperty('--mouse-tilt-x', `${currentTiltX}deg`);
+        bookContainer.style.setProperty('--mouse-tilt-y', `${currentTiltY}deg`);
+      }
+      requestAnimationFrame(applyParallax);
+    };
+    applyParallax();
+  }
 });
