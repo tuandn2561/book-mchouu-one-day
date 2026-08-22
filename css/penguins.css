@@ -1,0 +1,211 @@
+/* =========================================================
+   🐧 CUTE PENGUINS STYLING & ANIMATIONS 🐧
+   Waddling, Running, Page-Pulling Strain & Celebration Hops
+   ========================================================= */
+
+#penguins-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 80;
+  overflow: hidden;
+}
+
+.cute-penguin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 65px;
+  height: 75px;
+  pointer-events: auto;
+  cursor: pointer;
+  transform-origin: center bottom;
+  transition: transform 0.08s linear;
+  filter: drop-shadow(0 4px 10px rgba(60, 30, 20, 0.25));
+}
+
+.penguin-body-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: center bottom;
+}
+
+.penguin-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Speech Bubble */
+.penguin-bubble {
+  position: absolute;
+  top: -38px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  color: #7c4738;
+  font-family: var(--font-handwriting);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(60, 30, 20, 0.2);
+  border: 1px solid #f2e6dc;
+  pointer-events: none;
+  z-index: 90;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.penguin-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #ffffff;
+}
+
+.penguin-bubble.pop-in {
+  animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bubblePop {
+  0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+
+/* =========================================================
+   🚶 WADDLING / WALKING ANIMATION
+   ========================================================= */
+
+.cute-penguin.walking .penguin-body-wrapper {
+  animation: penguinWaddle 0.5s ease-in-out infinite alternate;
+}
+
+.cute-penguin.walking .foot-left {
+  animation: footStepLeft 0.5s ease-in-out infinite alternate;
+}
+
+.cute-penguin.walking .foot-right {
+  animation: footStepRight 0.5s ease-in-out infinite alternate;
+}
+
+.cute-penguin.walking .flipper-left {
+  animation: flipperFlapLeft 0.5s ease-in-out infinite alternate;
+}
+
+.cute-penguin.walking .flipper-right {
+  animation: flipperFlapRight 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes penguinWaddle {
+  0% { transform: rotate(-7deg) translateY(0); }
+  100% { transform: rotate(7deg) translateY(-3px); }
+}
+
+@keyframes footStepLeft {
+  0% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes footStepRight {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+@keyframes flipperFlapLeft {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(20deg); }
+}
+
+@keyframes flipperFlapRight {
+  0% { transform: rotate(20deg); }
+  100% { transform: rotate(-10deg); }
+}
+
+/* =========================================================
+   🏃 RUNNING TO PULL ANIMATION
+   ========================================================= */
+
+.cute-penguin.running .penguin-body-wrapper {
+  animation: penguinRun 0.25s ease-in-out infinite alternate;
+}
+
+.cute-penguin.running .flipper-left,
+.cute-penguin.running .flipper-right {
+  animation: flipperRunFast 0.15s ease-in-out infinite alternate;
+}
+
+@keyframes penguinRun {
+  0% { transform: rotate(12deg) translateY(-4px); }
+  100% { transform: rotate(18deg) translateY(2px); }
+}
+
+@keyframes flipperRunFast {
+  0% { transform: rotate(-25deg); }
+  100% { transform: rotate(35deg); }
+}
+
+/* =========================================================
+   💪 PULLING PAGE STRAIN ANIMATION
+   ========================================================= */
+
+.cute-penguin.pulling .penguin-body-wrapper {
+  animation: penguinPullStrain 0.35s ease-in-out infinite alternate;
+}
+
+.cute-penguin.pulling .flipper-left,
+.cute-penguin.pulling .flipper-right {
+  transform: rotate(-35deg) scaleY(1.1);
+}
+
+@keyframes penguinPullStrain {
+  0% { transform: rotate(-22deg) scaleX(0.95); }
+  100% { transform: rotate(-30deg) scaleX(1.05); }
+}
+
+/* =========================================================
+   🎉 CELEBRATING / VICTORY HOP ANIMATION
+   ========================================================= */
+
+.cute-penguin.celebrating .penguin-body-wrapper {
+  animation: penguinVictoryHop 0.7s ease-in-out infinite;
+}
+
+.cute-penguin.celebrating .flipper-left {
+  animation: flipperCheerLeft 0.3s ease-in-out infinite alternate;
+}
+
+.cute-penguin.celebrating .flipper-right {
+  animation: flipperCheerRight 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes penguinVictoryHop {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-24px) scale(1.15) rotate(10deg); }
+}
+
+@keyframes flipperCheerLeft {
+  0% { transform: rotate(-45deg); }
+  100% { transform: rotate(-10deg); }
+}
+
+@keyframes flipperCheerRight {
+  0% { transform: rotate(45deg); }
+  100% { transform: rotate(10deg); }
+}
+
+/* Responsive adjustment on small phones */
+@media (max-width: 600px) {
+  .cute-penguin {
+    width: 50px;
+    height: 60px;
+  }
+}

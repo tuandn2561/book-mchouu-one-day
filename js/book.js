@@ -427,44 +427,60 @@ class AlbumBook {
     if (this.isFlipping) return;
     if (this.currentPageIndex >= this.totalSheets) return;
     
-    this.isFlipping = true;
-    const currentSheet = this.sheets[this.currentPageIndex];
-    
-    if (window.audioManager) window.audioManager.playPageFlipSFX();
-    
-    currentSheet.element.classList.add('flipped');
-    currentSheet.element.style.zIndex = this.currentPageIndex + 1;
-    
-    this.currentPageIndex++;
-    this.updateContainerCentering();
-    this.handleVideoPlayback();
-    this.updateUI();
-    
-    setTimeout(() => {
-      this.isFlipping = false;
-    }, 700);
+    const executeFlip = () => {
+      this.isFlipping = true;
+      const currentSheet = this.sheets[this.currentPageIndex];
+      
+      if (window.audioManager) window.audioManager.playPageFlipSFX();
+      
+      currentSheet.element.classList.add('flipped');
+      currentSheet.element.style.zIndex = this.currentPageIndex + 1;
+      
+      this.currentPageIndex++;
+      this.updateContainerCentering();
+      this.handleVideoPlayback();
+      this.updateUI();
+      
+      setTimeout(() => {
+        this.isFlipping = false;
+      }, 750);
+    };
+
+    if (window.penguinManager) {
+      window.penguinManager.requestPageFlip('next', executeFlip);
+    } else {
+      executeFlip();
+    }
   }
 
   prevPage() {
     if (this.isFlipping) return;
     if (this.currentPageIndex <= 0) return;
     
-    this.isFlipping = true;
-    this.currentPageIndex--;
-    const prevSheet = this.sheets[this.currentPageIndex];
-    
-    if (window.audioManager) window.audioManager.playPageFlipSFX();
-    
-    prevSheet.element.classList.remove('flipped');
-    prevSheet.element.style.zIndex = this.totalSheets - this.currentPageIndex;
-    
-    this.updateContainerCentering();
-    this.handleVideoPlayback();
-    this.updateUI();
-    
-    setTimeout(() => {
-      this.isFlipping = false;
-    }, 700);
+    const executeFlip = () => {
+      this.isFlipping = true;
+      this.currentPageIndex--;
+      const prevSheet = this.sheets[this.currentPageIndex];
+      
+      if (window.audioManager) window.audioManager.playPageFlipSFX();
+      
+      prevSheet.element.classList.remove('flipped');
+      prevSheet.element.style.zIndex = this.totalSheets - this.currentPageIndex;
+      
+      this.updateContainerCentering();
+      this.handleVideoPlayback();
+      this.updateUI();
+      
+      setTimeout(() => {
+        this.isFlipping = false;
+      }, 750);
+    };
+
+    if (window.penguinManager) {
+      window.penguinManager.requestPageFlip('prev', executeFlip);
+    } else {
+      executeFlip();
+    }
   }
 
   goToPage(sheetIdx) {
