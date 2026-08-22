@@ -723,17 +723,36 @@ html, body {
    ========================================================= */
 
 @media (max-width: 768px) {
+  .main-stage {
+    padding: 8px 10px;
+  }
+  .top-bar {
+    max-width: 100%;
+  }
   .top-brand {
-    padding: 6px 12px;
+    padding: 5px 10px;
+    border-radius: 25px;
   }
   .brand-title {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+  }
+  .music-dock {
+    padding: 4px 10px;
+    gap: 8px;
   }
   .music-details {
     display: none;
   }
   .volume-slider {
     display: none;
+  }
+  .top-actions {
+    gap: 6px;
+  }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
   }
   .intro-greeting {
     font-size: 2rem;
@@ -745,11 +764,7 @@ html, body {
     width: 240px;
     height: 155px;
   }
-  .envelope-pocket {
-    border-left-width: 120px;
-    border-right-width: 120px;
-  }
-  .envelope-flap {
+  .envelope-pocket, .envelope-flap {
     border-left-width: 120px;
     border-right-width: 120px;
   }
@@ -758,18 +773,18 @@ html, body {
     height: 135px;
   }
   .bottom-control-dock {
-    padding: 6px 12px;
+    padding: 5px 12px;
     gap: 8px;
-    bottom: 10px;
+    bottom: 8px;
   }
   .nav-btn {
-    padding: 7px 12px;
-    font-size: 0.82rem;
+    padding: 6px 12px;
+    font-size: 0.8rem;
   }
   .page-indicator-badge {
     min-width: 90px;
-    font-size: 0.78rem;
-    padding: 5px 10px;
+    font-size: 0.76rem;
+    padding: 4px 10px;
   }
   .gallery-modal-content {
     width: 94%;
@@ -783,35 +798,59 @@ html, body {
 }
 
 @media (max-width: 480px) {
-  .top-app-bar {
-    top: 8px;
-    padding: 0 10px;
-    gap: 6px;
+  .main-stage {
+    padding: 5px 4px;
+  }
+  .top-bar {
+    padding: 0 4px;
   }
   .top-brand {
     padding: 4px 8px;
     border-radius: 20px;
   }
+  .brand-icon {
+    font-size: 1.1rem;
+  }
   .brand-title {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
+    max-width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .brand-dot {
-    font-size: 0.75rem;
+  .music-dock {
+    padding: 3px 8px;
+    gap: 4px;
+    border-radius: 25px;
   }
-  .brand-subtitle {
+  .music-vinyl {
+    width: 26px;
+    height: 26px;
+    font-size: 0.65rem;
+  }
+  .music-details {
     display: none;
   }
-  .music-player-pill {
-    padding: 3px 6px;
-    gap: 4px;
+  .music-controls {
+    gap: 3px;
   }
   .music-btn {
-    width: 28px;
-    height: 28px;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
+    padding: 2px;
+  }
+  .volume-slider {
+    display: none;
+  }
+  .top-actions {
+    gap: 4px;
+  }
+  .icon-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 0.85rem;
   }
   .intro-badge {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     padding: 4px 12px;
   }
   .intro-greeting {
@@ -827,11 +866,7 @@ html, body {
     width: 200px;
     height: 130px;
   }
-  .envelope-pocket {
-    border-left-width: 100px;
-    border-right-width: 100px;
-  }
-  .envelope-flap {
+  .envelope-pocket, .envelope-flap {
     border-left-width: 100px;
     border-right-width: 100px;
   }
@@ -839,23 +874,26 @@ html, body {
     width: 180px;
     height: 115px;
   }
-  .btn-open-gift {
+  .intro-open-btn {
     padding: 10px 22px;
     font-size: 0.92rem;
   }
+  .bottom-control-container {
+    padding: 0 4px;
+  }
   .bottom-control-dock {
     padding: 4px 8px;
-    gap: 6px;
-    bottom: 6px;
+    gap: 5px;
+    bottom: 4px;
   }
   .nav-btn {
-    padding: 6px 10px;
-    font-size: 0.76rem;
+    padding: 5px 8px;
+    font-size: 0.72rem;
   }
   .page-indicator-badge {
-    min-width: 78px;
-    font-size: 0.72rem;
-    padding: 4px 8px;
+    min-width: 72px;
+    font-size: 0.68rem;
+    padding: 3px 6px;
   }
   .gallery-modal-content {
     width: 96%;
@@ -863,7 +901,7 @@ html, body {
     padding: 12px 8px;
   }
   .gallery-title {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
   }
   .gallery-grid {
     grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));

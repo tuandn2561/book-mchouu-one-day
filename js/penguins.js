@@ -371,10 +371,11 @@ class PenguinManager {
     
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const floorY = h - 85;
+    const isMobile = w <= 600;
+    const floorY = h - (isMobile ? 54 : 85);
     
     const configs = [
-      { id: 1, name: "Poby Bé Nơ", acc: "bow", x: w * 0.12, y: floorY },
+      { id: 1, name: "Poby Bé Nơ", acc: "bow", x: w * 0.10, y: floorY },
       { id: 2, name: "Bibi Mũ Tiệc", acc: "hat", x: w * 0.35, y: floorY },
       { id: 3, name: "Mimi Khăn Ấm", acc: "scarf", x: w * 0.65, y: floorY },
       { id: 4, name: "Lili Vương Miện", acc: "crown", x: w * 0.88, y: floorY }
@@ -389,9 +390,12 @@ class PenguinManager {
   }
 
   onResize() {
-    const floorY = window.innerHeight - 85;
+    const isMobile = window.innerWidth <= 600;
+    const floorY = window.innerHeight - (isMobile ? 54 : 85);
     this.penguins.forEach(p => {
       p.homeY = floorY;
+      p.width = isMobile ? 44 : 64;
+      p.height = isMobile ? 54 : 76;
       if (p.state === 'WALKING' || p.state === 'IDLE' || p.state === 'CELEBRATING') {
         p.y = floorY;
       }
